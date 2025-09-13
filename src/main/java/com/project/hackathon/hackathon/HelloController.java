@@ -10,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -19,11 +20,15 @@ import java.util.stream.Stream;
 
 public class HelloController {
 
+    public ImageView tetrisImage;
+    public ImageView pongImage;
+    public ImageView pacmanImage;
+    public ImageView dinoImage;
+
     @FXML private AnchorPane rootPane;     // fx:id="rootPane"
     @FXML private StackPane centerLayer;   // fx:id="centerLayer"
     @FXML private GridPane buttonGrid;     // fx:id="buttonGrid"
 
-    //why
     @FXML private Label welcomeText;
 
     @FXML private Button Pong;
@@ -36,6 +41,7 @@ public class HelloController {
 
     @FXML
     public void initialize() {
+
         // --- Background image ---
         String bgUrl = Objects.requireNonNull(
                 getClass().getResource("/images/gridstillbackground.png"),
