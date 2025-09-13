@@ -6,9 +6,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="rootPane"  xmlns="http://javafx.com/javafx"
+<?import javafx.scene.shape.Rectangle?>
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.PongController">
 
     <Button fx:id="backToMain" >back</Button>
+
+    <Rectangle AnchorPane.rightAnchor="10" width="20" height="100" y="100"></Rectangle>
+    <Rectangle AnchorPane.leftAnchor="10" width="20" height="100" y="100"></Rectangle>
 </AnchorPane>
