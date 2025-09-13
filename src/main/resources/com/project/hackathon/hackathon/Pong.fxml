@@ -6,9 +6,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="rootPane"  xmlns="http://javafx.com/javafx"
+<?import javafx.scene.shape.Rectangle?>
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.PongController">
 
+    <GridPane fx:id="score"> <Label> </Label> </GridPane>
     <Button fx:id="backToMain" >back</Button>
+
+    <Rectangle fx:id="player" AnchorPane.rightAnchor="10" width="20" height="100"></Rectangle>
+    <Rectangle fx:id="clanker" AnchorPane.leftAnchor="10" width="20" height="100"></Rectangle>
+
+    <Rectangle fx:id="ball" width="10" height="10"></Rectangle>
 </AnchorPane>
