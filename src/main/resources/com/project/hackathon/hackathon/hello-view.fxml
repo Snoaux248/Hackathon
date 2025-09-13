@@ -11,7 +11,7 @@
             fx:controller="com.project.hackathon.hackathon.HelloController">
 
   <Label fx:id="welcomeText"/>
-  <Button text="Pong!" AnchorPane.leftAnchor="0" />
+  <Button text="Pong!" AnchorPane.leftAnchor="10" />
   <Button text="Tetris!" AnchorPane.leftAnchor="80"/>
   <Button text="PacMan!" AnchorPane.leftAnchor="170"/>
 </AnchorPane>
