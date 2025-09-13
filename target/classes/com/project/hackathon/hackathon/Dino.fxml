@@ -14,14 +14,21 @@
             fx:controller="com.project.hackathon.hackathon.DinoController"
             prefHeight="400.0" prefWidth="600.0">
     <!-- Ground -->
-    <Line fx:id="ground" startX="0" startY="180" endX="600" endY="180" stroke="black" strokeWidth="2"/>
+    <Line fx:id="ground" startY="180" endX="600" endY="180" stroke="black" strokeWidth="2"/>
 
     <!-- Dino -->
-    <Rectangle fx:id="dino" x="50" y="150" width="30" height="30" fill="black"></Rectangle>
+    <Rectangle fx:id="dino" x="50" y="150" width="30" height="30" fill="black"/>
 
     <!-- Cactus -->
-    <Rectangle fx:id="cactus" x="600" y="150" width="20" height="30" fill="green"></Rectangle>
+    <Rectangle fx:id="cactus" x="600" y="150" width="20" height="30" fill="green"/>
 
+    <!-- Multi Cactus -->
+    <HBox fx:id="multi" spacing="5" alignment="BOTTOM_CENTER" layoutX="600" layoutY="150">
+        <Rectangle width="20" height="20" fill="green"/>
+        <Rectangle width="20" height="60" fill="green"/>
+        <Rectangle width="20" height="40" fill="green"/>
+    </HBox>
+    <!-- q-->
     <!-- Game Over Text -->
     <GridPane alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0"
               AnchorPane.topAnchor="0">
