@@ -17,7 +17,6 @@
                AnchorPane.bottomAnchor="0.0"
                AnchorPane.leftAnchor="0.0">
 
-        <!-- 2x2 grid of buttons, centered and responsive -->
         <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="75" vgap="75">
 
             <!-- Two columns splitting width 50/50 -->

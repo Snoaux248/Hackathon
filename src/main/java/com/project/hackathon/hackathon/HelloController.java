@@ -23,6 +23,7 @@ public class HelloController {
     @FXML private StackPane centerLayer;   // fx:id="centerLayer"
     @FXML private GridPane buttonGrid;     // fx:id="buttonGrid"
 
+    //why
     @FXML private Label welcomeText;
 
     @FXML private Button Pong;
