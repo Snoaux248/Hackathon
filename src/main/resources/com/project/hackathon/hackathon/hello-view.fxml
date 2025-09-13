@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.image.ImageView?>
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.HelloController">
 
@@ -17,7 +18,7 @@
                AnchorPane.bottomAnchor="0.0"
                AnchorPane.leftAnchor="0.0">
 
-        <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="75" vgap="75">
+        <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="20" vgap="25">
 
             <!-- Two columns splitting width 50/50 -->
             <columnConstraints>
@@ -27,26 +28,61 @@
 
             <!-- Two rows splitting height 50/50 -->
             <rowConstraints>
-                <RowConstraints percentHeight="25"/>
-                <RowConstraints percentHeight="25"/>
-                <RowConstraints percentHeight="25"/>
+                <RowConstraints percentHeight="30"/>
+                <RowConstraints percentHeight="35"/>
+                <RowConstraints percentHeight="35"/>
             </rowConstraints>
 
             <children>
-                <Button fx:id="Pong"   text="Pong!"   GridPane.rowIndex="1" GridPane.columnIndex="0"
-                        maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
-                <Button fx:id="Tetris" text="Tetris!" GridPane.rowIndex="1" GridPane.columnIndex="1"
-                        maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
-                <Button fx:id="Pacman" text="PacMan!" GridPane.rowIndex="2" GridPane.columnIndex="0"
-                        maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
-                <Button fx:id="Dino"   text="Dino!"   GridPane.rowIndex="2" GridPane.columnIndex="1"
-                        maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                <Label fx:id="welcomeText" text="Legacies" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                       GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM"
+                       style="-fx-font-size: 100px; -fx-font-weight: bold; -fx-font-family: 'Orbitron';
+                       -fx-font-style: italic; -fx-text-fill: linear-gradient(#95EEFE, #0068CE)"/>
+
+                <StackPane GridPane.rowIndex="1" GridPane.columnIndex="0"
+                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <ImageView fx:id="pongImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
+                               fitHeight="220"/>
+                    <Button fx:id="Pong" text="Pong"
+                            maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
+                            StackPane.alignment="CENTER"
+                            style="-fx-background-color: transparent; -fx-border-color: transparent;
+                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                </StackPane>
+
+                <StackPane GridPane.rowIndex="1" GridPane.columnIndex="1"
+                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <ImageView fx:id="tetrisImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
+                               fitHeight="220"/>
+                    <Button fx:id="Tetris" text="Tetris"
+                            maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
+                            StackPane.alignment="CENTER"
+                            style="-fx-background-color: transparent; -fx-border-color: transparent;
+                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                </StackPane>
+
+                <StackPane GridPane.rowIndex="2" GridPane.columnIndex="0"
+                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <ImageView fx:id="pacmanImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
+                               fitHeight="220"/>
+                    <Button fx:id="Pacman" text="Pacman"
+                            maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
+                            StackPane.alignment="CENTER"
+                            style="-fx-background-color: transparent; -fx-border-color: transparent;
+                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                </StackPane>
+
+                <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1"
+                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <ImageView fx:id="dinoImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
+                               fitHeight="220"/>
+                    <Button fx:id="Dino" text="Dino"
+                            maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
+                            StackPane.alignment="CENTER"
+                            style="-fx-background-color: transparent; -fx-border-color: transparent;
+                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                </StackPane>
             </children>
         </GridPane>
     </StackPane>
-
-    <!-- Anchored label stays outside the centering layer -->
-    <Label fx:id="welcomeText"
-           AnchorPane.topAnchor="10.0"
-           AnchorPane.leftAnchor="10.0"/>
 </AnchorPane>
