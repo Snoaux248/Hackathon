@@ -11,7 +11,6 @@
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.HelloController">
 
-    <!-- Fill-all layer (great place to add your background ImageView in the controller) -->
     <StackPane fx:id="centerLayer"
                AnchorPane.topAnchor="0.0"
                AnchorPane.rightAnchor="0.0"
