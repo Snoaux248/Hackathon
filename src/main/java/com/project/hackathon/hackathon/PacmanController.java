@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -12,6 +13,7 @@ import javafx.animation.AnimationTimer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PacmanController {
@@ -20,6 +22,7 @@ public class PacmanController {
     @FXML private Pane gamePane;
     @FXML private AnchorPane rootPane;
     @FXML private Button backToMain;
+    @FXML private GridPane board;
 
     private double speed = 100; // pixels per second
 
@@ -28,10 +31,12 @@ public class PacmanController {
 
     private List<Rectangle> walls = new ArrayList<>();
 
-    private final int rows = 21;
-    private final int cols = 21;
+    private final int rows = 25;
+    private final int cols = 25;
     private int[][] wallArray = new int[rows][cols];
 
+    private int[][] boardArray = new int[rows][cols];
+    private int scale = 0;
     public void initialize() {
         backToMain.setOnAction(event -> {
             try {
@@ -40,15 +45,35 @@ public class PacmanController {
                 System.out.println(e);
             }
         });
+        if(HelloApplication.primaryStage.getWidth() < HelloApplication.primaryStage.getHeight()){
+            scale = (int)((HelloApplication.primaryStage.getWidth()-100.0)/25.0);
+        }else{
+            scale = (int)((HelloApplication.primaryStage.getHeight()-100.0)/25.0);
+        }
+        Random rand = new Random();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+               boardArray[i][j] = rand.nextInt(2);
+               System.out.println(boardArray[i][j]);
+               if(boardArray[i][j] == 0){
+                   Rectangle r =  new Rectangle();
+                   r.setWidth(scale);
+                   r.setHeight(scale);
+                   r.setFill(Color.BLACK);
 
-        generateCorridorMaze();   // create corridors
-        generateWallsFromArray(); // render walls
-
-        setupControls();
-        startGameLoop();
+                   board.setRowIndex(r, i);
+                   board.setColumnIndex(r, j);
+                   board.getChildren().add(r);
+               }
+            }
+        }
     }
 
-    // ===== Input handling =====
+
+}
+
+
+/* // ===== Input handling =====
     private void setupControls() {
         gamePane.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
@@ -165,5 +190,4 @@ public class PacmanController {
                 }
             }
         }
-    }
-}
+    }*/
