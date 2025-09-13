@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import java.util.Random;
 
 public class DinoController {
-
+    //
     @FXML public AnchorPane rootPane;
     @FXML public Button backToMain;
     @FXML public Rectangle dino;
