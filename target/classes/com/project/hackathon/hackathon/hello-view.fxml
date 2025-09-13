@@ -14,4 +14,5 @@
   <Button fx:id="Pong" text="Pong!" AnchorPane.leftAnchor="10" />
   <Button fx:id="Tetris"  text="Tetris!" AnchorPane.leftAnchor="80"/>
   <Button fx:id="Pacman" text="PacMan!" AnchorPane.leftAnchor="170"/>
+  <Button fx:id="Dino" text="Dino!" AnchorPane.leftAnchor="250"/>
 </AnchorPane>

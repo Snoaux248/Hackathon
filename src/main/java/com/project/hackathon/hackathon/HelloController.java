@@ -13,6 +13,7 @@ public class HelloController {
     @FXML private Button Pong;
     @FXML private Button Tetris;
     @FXML private Button Pacman;
+    @FXML private Button Dino;
 
     public void initialize() {
         Pong.setOnAction(event -> {
@@ -22,5 +23,27 @@ public class HelloController {
                 System.out.println(e);
             }
         });
+        Tetris.setOnAction(event -> {
+            try {
+                Views.getTetrisView(rootPane);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        });
+        Dino.setOnAction(event -> {
+            try {
+                Views.getDinoView(rootPane);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        });
+        Pacman.setOnAction(event -> {
+            try {
+                Views.getPacmanView(rootPane);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        });
+
     }
 }

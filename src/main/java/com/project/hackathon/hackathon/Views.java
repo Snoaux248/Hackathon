@@ -11,9 +11,37 @@ public class Views {
 
     public static AnchorPane getPongView(AnchorPane rootPane) throws Exception{
         Stage stage = (Stage) rootPane.getScene().getWindow();
-        AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("pong.fxml")));
+        AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("Pong.fxml")));
         stage.getScene().setRoot(pane);
         stage.setTitle("Pong! ");
+        return pane;
+    }
+    public static AnchorPane getTetrisView(AnchorPane rootPane) throws Exception{
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("Tetris.fxml")));
+        stage.getScene().setRoot(pane);
+        stage.setTitle("Tetris! ");
+        return pane;
+    }
+    public static AnchorPane getDinoView(AnchorPane rootPane) throws Exception{
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("Dino.fxml")));
+        stage.getScene().setRoot(pane);
+        stage.setTitle("Dino! ");
+        return pane;
+    }
+    public static AnchorPane getPacmanView(AnchorPane rootPane) throws Exception{
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("Pacman.fxml")));
+        stage.getScene().setRoot(pane);
+        stage.setTitle("Pacman! ");
+        return pane;
+    }
+    public static AnchorPane getMainView(AnchorPane rootPane) throws Exception{
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("hello-view.fxml")));
+        stage.getScene().setRoot(pane);
+        stage.setTitle("Main! ");
         return pane;
     }
 }

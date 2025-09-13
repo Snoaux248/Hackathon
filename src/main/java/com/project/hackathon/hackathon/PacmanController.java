@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 
-public class PongController {
+public class PacmanController {
 
     @FXML public AnchorPane rootPane;
 
