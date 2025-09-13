@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
-
 
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.PacmanController"
-            prefHeight="400.0" prefWidth="600.0">
-    <!--
-    <Pane fx:id="gamePane" layoutX="50" layoutY="50" prefWidth="1280" prefHeight="670" style="-fx-background-color: black;">
-        <Circle fx:id="Pacman" layoutX="50" layoutY="50" radius="15" fill="YELLOW"/>
+            prefHeight="800.0" prefWidth="600.0">
 
-    </Pane>
-    -->
-
-    <GridPane fx:id="board" alignment="center" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0">
-
+    <GridPane fx:id="board" alignment="center"
+              AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
+              AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0"
+              gridLinesVisible="true">
+        <!-- Pac-Man starts as a Circle, will be wrapped in StackPane in controller -->
+        <Circle fx:id="Pacman" radius="10" fill="YELLOW"/>
     </GridPane>
+
     <Button fx:id="backToMain" layoutX="10" layoutY="10" text="Back"/>
 </AnchorPane>
-
