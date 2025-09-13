@@ -80,6 +80,17 @@ public class PacmanController {
                 System.out.println(e);
             }
         });
+        Pane w =  new Pane();
+        board.setRowIndex(w, 1);
+        board.setColumnIndex(w, 1);
+        GridPane.setColumnSpan(w, 2);
+        GridPane.setRowSpan(w, 2);
+        w.setPrefHeight(scale*2);
+        w.setPrefWidth(scale*2);
+        w.setStyle("-fx-background-color: yellow;" +
+                "-fx-background-radius: 40 40 40 40;");
+        board.getChildren().add(w);
+
         if(HelloApplication.primaryStage.getWidth() < HelloApplication.primaryStage.getHeight()){
             scale = (int)((HelloApplication.primaryStage.getWidth()-100.0)/cols);
         }else{
@@ -88,26 +99,35 @@ public class PacmanController {
         Random rand = new Random();
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < cols; j++) {
-               System.out.println(boardArray[i][j]);
                if(boardArray[i][j] == 1){
-                   Rectangle r =  new Rectangle();
-                   r.setWidth(scale);
-                   r.setHeight(scale);
-                   r.setFill(Color.BLACK);
+                   Pane r =  new Pane();
+                   r.setPrefWidth(scale);
+                   r.setPrefHeight(scale);
+                   r.setStyle("-fx-background-color: #000;\n");
 
                    board.setRowIndex(r, i);
                    board.setColumnIndex(r, j);
                    board.getChildren().add(r);
                    int[] temp = {0, 0, 0, 0};
+
+                   /*
                    if(i > 0 && i < rows-1 && j > 0 && j < cols-1){
-                       temp[0] = boardArray[i][j-1] == 1 ? 1: 0;
-                       temp[1] = boardArray[i+1][j] == 1 ? 1: 0;
-                       temp[2] = boardArray[i][j+1] == 1 ? 1: 0;
-                       temp[3] = boardArray[i-1][j] == 1 ? 1: 0;
-                   }
+                       temp[0] = boardArray[i][j-1] == 0 ? 1: 0;
+                       temp[1] = boardArray[i+1][j] == 0 ? 1: 0;
+                       temp[2] = boardArray[i][j+1] == 0 ? 1: 0;
+                       temp[3] = boardArray[i-1][j] == 0 ? 1: 0;
+                       r.setStyle(r.getStyle()+"-fx-border-width:"+ 2*temp[1]+","+ 2*temp[2]+","+ 2*temp[3]+","+ 2*temp[0]+";\n");
+                       String h = r.getStyle()+"-fx-border-color:"+helper(temp[1])+" "+helper(temp[2])+" "+helper(temp[3])+" "+helper(temp[0])+";\n";
+                       System.out.println(h);
+                       r.setStyle(h);
+                   }*/
+
                }
             }
         }
+    }
+    public static String helper(int i){
+        return (i == 1 ? "#00BFFF": "#000000");
     }
 
 
