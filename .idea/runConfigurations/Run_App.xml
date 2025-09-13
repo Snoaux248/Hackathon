@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run App" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.project.hackathon.hackathon.HelloApplication" />
+    <module name="Hackathon" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
