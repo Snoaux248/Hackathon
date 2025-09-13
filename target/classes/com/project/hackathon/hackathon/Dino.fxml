@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.project.hackathon.hackathon.DinoController"
+            prefHeight="400.0" prefWidth="600.0">
+    <!-- Ground -->
+    <Line fx:id="ground" startY="180" endX="600" endY="180" stroke="black" strokeWidth="2"/>
+
+    <!-- Dino -->
+    <Rectangle fx:id="dino" x="50" y="150" width="30" height="30" fill="black"/>
+
+    <!-- Cactus -->
+    <Rectangle fx:id="cactus" x="600" y="150" width="20" height="30" fill="green"/>
+
+    <!-- Multi Cactus -->
+    <HBox fx:id="multi" spacing="5" alignment="BOTTOM_CENTER" layoutX="600" layoutY="150">
+        <Rectangle width="20" height="20" fill="green"/>
+        <Rectangle width="20" height="60" fill="green"/>
+        <Rectangle width="20" height="40" fill="green"/>
+    </HBox>
+
+    <!-- Game Over Text -->
+    <GridPane alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0"
+              AnchorPane.topAnchor="0">
+        <VBox spacing="10" alignment="CENTER">
+            <Text fx:id="gameOverText" text="GAME OVER" layoutX="220" layoutY="100" fill="red" style="-fx-font-size:36px;" visible="false"/>
+            <Button fx:id="restartButton" text="Restart"
+                    layoutX="250" layoutY="150" visible="false"/>
+        </VBox>
+
+    </GridPane>
+
+
+    <Button fx:id="backToMain" >back</Button>
+</AnchorPane>

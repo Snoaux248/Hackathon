@@ -1,0 +1,23 @@
+AnchorPane{
+    -fx-alignment:center;
+    -fx-background: #333333;
+}
+GridPane{
+    -fx-pref-width: 100px;
+    -fx-pref-height: 100px;
+    -fx-max-width: Infinite;
+    -fx-max-height: 100px;
+    -fx-min-width: Infinite;
+    -fx-min-height: 100px;
+    -fx-alignment: center;
+}
+Label{
+    -fx-alignment: center;
+    -fx-font-size: 60px;
+}
+#player, #clanker{
+    -fx-fill: #caf4f4;
+    -fx-arc-height: 10px;
+    -fx-arc-width: 10px;
+    -fx-effect: dropshadow(gaussian, deepskyblue, 10, 0.3, 0, 0);
+}
