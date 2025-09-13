@@ -2,12 +2,19 @@ package com.project.hackathon.hackathon;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
+import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PacmanController {
 
@@ -15,11 +22,21 @@ public class PacmanController {
     @FXML private Pane gamePane;
     @FXML private AnchorPane rootPane;
     @FXML private Button backToMain;
+    @FXML private GridPane board;
 
     private double speed = 100; // pixels per second
 
     private double dx = 0, dy = 0;         // current direction
+    private double nextDx = 0, nextDy = 0; // desired direction
 
+    private List<Rectangle> walls = new ArrayList<>();
+
+    private final int rows = 25;
+    private final int cols = 25;
+    private int[][] wallArray = new int[rows][cols];
+
+    private int[][] boardArray = new int[rows][cols];
+    private int scale = 0;
     public void initialize() {
         backToMain.setOnAction(event -> {
             try {
@@ -28,31 +45,50 @@ public class PacmanController {
                 System.out.println(e);
             }
         });
+        if(HelloApplication.primaryStage.getWidth() < HelloApplication.primaryStage.getHeight()){
+            scale = (int)((HelloApplication.primaryStage.getWidth()-100.0)/25.0);
+        }else{
+            scale = (int)((HelloApplication.primaryStage.getHeight()-100.0)/25.0);
+        }
+        Random rand = new Random();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+               boardArray[i][j] = rand.nextInt(2);
+               System.out.println(boardArray[i][j]);
+               if(boardArray[i][j] == 0){
+                   Rectangle r =  new Rectangle();
+                   r.setWidth(scale);
+                   r.setHeight(scale);
+                   r.setFill(Color.BLACK);
 
-        // Delay setup until scene is ready
-        rootPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                setupGlobalControls(newScene);
+                   board.setRowIndex(r, i);
+                   board.setColumnIndex(r, j);
+                   board.getChildren().add(r);
+               }
             }
-        });
-
-        startGameLoop();
+        }
     }
 
-    private void setupGlobalControls(javafx.scene.Scene scene) {
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case UP -> { dx = 0; dy = -1; }
-                case DOWN -> { dx = 0; dy = 1; }
-                case LEFT -> { dx = -1; dy = 0; }
-                case RIGHT -> { dx = 1; dy = 0; }
+
+}
+
+
+/* // ===== Input handling =====
+    private void setupControls() {
+        gamePane.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+            switch (code) {
+                case UP -> { nextDx = 0; nextDy = -1; }
+                case DOWN -> { nextDx = 0; nextDy = 1; }
+                case LEFT -> { nextDx = -1; nextDy = 0; }
+                case RIGHT -> { nextDx = 1; nextDy = 0; }
             }
         });
+        gamePane.setFocusTraversable(true);
     }
 
     // ===== Game loop =====
     private void startGameLoop() {
-        gamePane.requestFocus();
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
 
@@ -74,12 +110,37 @@ public class PacmanController {
     private void movePacman(double deltaSeconds) {
         double buffer = 0.1; // allows turning slightly before full alignment
 
+        // Check if next desired direction is clear
+        double attemptX = Pacman.getLayoutX() + nextDx * speed * deltaSeconds;
+        double attemptY = Pacman.getLayoutY() + nextDy * speed * deltaSeconds;
+        Circle tempNext = new Circle(attemptX, attemptY, Pacman.getRadius() - buffer);
+
+        boolean canMoveNext = true;
+        for (Rectangle wall : walls) {
+            if (tempNext.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+                canMoveNext = false;
+                break;
+            }
+        }
+
+        if (canMoveNext) {
+            dx = nextDx;
+            dy = nextDy;
+        }
+
         // Move in current direction
-        gamePane.setFocusTraversable(true);
         double newX = Pacman.getLayoutX() + dx * speed * deltaSeconds;
         double newY = Pacman.getLayoutY() + dy * speed * deltaSeconds;
         Circle temp = new Circle(newX, newY, Pacman.getRadius() - buffer);
 
+        // Collision check
+        for (Rectangle wall : walls) {
+            if (temp.getBoundsInParent().intersects(wall.getBoundsInParent())) {
+                dx = 0;
+                dy = 0;
+                return;
+            }
+        }
 
         // Keep inside gamePane
         if (newX < Pacman.getRadius()) newX = Pacman.getRadius();
@@ -90,4 +151,43 @@ public class PacmanController {
         Pacman.setLayoutX(newX);
         Pacman.setLayoutY(newY);
     }
-}
+
+    // ===== Corridor-style maze =====
+    private void generateCorridorMaze() {
+        // Step 1: initialize all empty
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                wallArray[i][j] = 0;
+
+        // Step 2: add random walls at intersections to form junctions
+        for (int i = 1; i < rows - 1; i += 2) {
+            for (int j = 1; j < cols - 1; j += 2) {
+                wallArray[i][j] = ThreadLocalRandom.current().nextInt(0, 2); // 0 = empty, 1 = wall
+            }
+        }
+
+        // Step 3: ensure Pac-Man start is empty
+        wallArray[0][0] = 0;
+        wallArray[1][0] = 0;
+        wallArray[0][1] = 0;
+        wallArray[1][1] = 0;
+    }
+
+    // ===== Render walls =====
+    private void generateWallsFromArray() {
+        double cellWidth = gamePane.getPrefWidth() / cols;
+        double cellHeight = gamePane.getPrefHeight() / rows;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (wallArray[i][j] == 1) {
+                    double x = j * cellWidth;
+                    double y = i * cellHeight;
+                    Rectangle wall = new Rectangle(x, y, cellWidth, cellHeight);
+                    wall.setFill(Color.BLUE);
+                    walls.add(wall);
+                    gamePane.getChildren().add(wall);
+                }
+            }
+        }
+    }*/

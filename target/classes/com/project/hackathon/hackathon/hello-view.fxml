@@ -11,15 +11,13 @@
 <AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.HelloController">
 
-    <!-- Fill-all layer (great place to add your background ImageView in the controller) -->
     <StackPane fx:id="centerLayer"
                AnchorPane.topAnchor="0.0"
                AnchorPane.rightAnchor="0.0"
                AnchorPane.bottomAnchor="0.0"
                AnchorPane.leftAnchor="0.0">
 
-        <!-- 2x2 grid of buttons, centered and responsive -->
-        <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="20" vgap="20">
+        <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="75" vgap="75">
 
             <!-- Two columns splitting width 50/50 -->
             <columnConstraints>
@@ -31,16 +29,17 @@
             <rowConstraints>
                 <RowConstraints percentHeight="25"/>
                 <RowConstraints percentHeight="25"/>
+                <RowConstraints percentHeight="25"/>
             </rowConstraints>
 
             <children>
-                <Button fx:id="Pong"   text="Pong!"   GridPane.rowIndex="0" GridPane.columnIndex="0"
+                <Button fx:id="Pong"   text="Pong!"   GridPane.rowIndex="1" GridPane.columnIndex="0"
                         maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
-                <Button fx:id="Tetris" text="Tetris!" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                <Button fx:id="Tetris" text="Tetris!" GridPane.rowIndex="1" GridPane.columnIndex="1"
                         maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
-                <Button fx:id="Pacman" text="PacMan!" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                <Button fx:id="Pacman" text="PacMan!" GridPane.rowIndex="2" GridPane.columnIndex="0"
                         maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
-                <Button fx:id="Dino"   text="Dino!"   GridPane.rowIndex="1" GridPane.columnIndex="1"
+                <Button fx:id="Dino"   text="Dino!"   GridPane.rowIndex="2" GridPane.columnIndex="1"
                         maxWidth="Infinity" maxHeight="Infinity" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
             </children>
         </GridPane>

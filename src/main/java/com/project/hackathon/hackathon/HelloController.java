@@ -11,6 +11,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -21,6 +23,7 @@ public class HelloController {
     @FXML private StackPane centerLayer;   // fx:id="centerLayer"
     @FXML private GridPane buttonGrid;     // fx:id="buttonGrid"
 
+    //why
     @FXML private Label welcomeText;
 
     @FXML private Button Pong;
@@ -28,7 +31,11 @@ public class HelloController {
     @FXML private Button Pacman;
     @FXML private Button Dino;
 
-    @FXML public void initialize() {
+    // ---- FIXED WIDTH:HEIGHT RATIO (change as needed) ----
+    private static final double ASPECT = 16.0/9.0; // 1.0 = square; use 16.0/9.0 for 16:9, etc.
+
+    @FXML
+    public void initialize() {
         // --- Background image ---
         String bgUrl = Objects.requireNonNull(
                 getClass().getResource("/images/gridstillbackground.png"),
@@ -43,11 +50,23 @@ public class HelloController {
         bgView.fitHeightProperty().bind(centerLayer.heightProperty());
         centerLayer.getChildren().add(0, bgView);
 
-        // --- Make buttons fill cells ---
+        // --- Make buttons fill cell width; keep fixed aspect ratio for height ---
         Stream.of(Pong, Tetris, Pacman, Dino).forEach(b -> {
+            // Let GridPane give full width; we’ll derive height from width
             b.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             GridPane.setHgrow(b, Priority.ALWAYS);
             GridPane.setVgrow(b, Priority.ALWAYS);
+
+            // Center the button within its cell when height < cell height
+            GridPane.setHalignment(b, HPos.CENTER);
+            GridPane.setValignment(b, VPos.CENTER);
+
+            // Keep a fixed aspect ratio: height = width / ASPECT
+            b.prefHeightProperty().bind(b.widthProperty().divide(ASPECT));
+            b.minHeightProperty().bind(b.prefHeightProperty());
+            b.maxHeightProperty().bind(b.prefHeightProperty());
+
+            // Usability niceties
             b.setWrapText(true);
             b.setTextAlignment(TextAlignment.CENTER);
             b.setGraphicTextGap(8);
@@ -56,7 +75,7 @@ public class HelloController {
 
         // --- Pong icon ---
         ImageView pongIV = new ImageView(new Image(
-                Objects.requireNonNull(getClass().getResource("/images/ponglabeltemp.jpg")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("/images/pong16by9.jpg")).toExternalForm(),
                 true
         ));
         pongIV.setPreserveRatio(true);
@@ -67,7 +86,7 @@ public class HelloController {
 
         // --- Tetris icon ---
         ImageView tetrisIV = new ImageView(new Image(
-                Objects.requireNonNull(getClass().getResource("/images/tetrislabeltemp.jpg")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("/images/tetris16by9.jpg")).toExternalForm(),
                 true
         ));
         tetrisIV.setPreserveRatio(true);
@@ -78,7 +97,7 @@ public class HelloController {
 
         // --- Pacman icon ---
         ImageView pacmanIV = new ImageView(new Image(
-                Objects.requireNonNull(getClass().getResource("/images/pacmanlabeltemp.jpg")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("/images/pacman16by9.jpg")).toExternalForm(),
                 true
         ));
         pacmanIV.setPreserveRatio(true);
@@ -89,7 +108,7 @@ public class HelloController {
 
         // --- Dino icon ---
         ImageView dinoIV = new ImageView(new Image(
-                Objects.requireNonNull(getClass().getResource("/images/dinolabeltemp.png")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("/images/dino16by9.png")).toExternalForm(),
                 true
         ));
         dinoIV.setPreserveRatio(true);
@@ -98,10 +117,11 @@ public class HelloController {
         dinoIV.fitHeightProperty().bind(Dino.heightProperty().multiply(0.7));
         Dino.setGraphic(dinoIV);
 
-        // --- Button actions ---
+        // --- Actions ---
         Pong.setOnAction(e -> { try { Views.getPongView(rootPane); } catch (Exception ex) { ex.printStackTrace(); } });
         Tetris.setOnAction(e -> { try { Views.getTetrisView(rootPane); } catch (Exception ex) { ex.printStackTrace(); } });
         Pacman.setOnAction(e -> { try { Views.getPacmanView(rootPane); } catch (Exception ex) { ex.printStackTrace(); } });
         Dino.setOnAction(e -> { try { Views.getDinoView(rootPane); } catch (Exception ex) { ex.printStackTrace(); } });
+
     }
 }
