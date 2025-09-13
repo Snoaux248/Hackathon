@@ -5,11 +5,21 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
 
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.PacmanController"
             prefHeight="400.0" prefWidth="600.0">
 
-    <Button fx:id="backToMain" >back</Button>
+    <Button fx:id="backToMain" layoutX="10" layoutY="10" text="Back"/>
+
+    <Pane fx:id="gamePane" layoutX="50" layoutY="50" prefWidth="1280" prefHeight="670" style="-fx-background-color: black;">
+        <Circle fx:id="Pacman" layoutX="50" layoutY="50" radius="15" fill="YELLOW"/>
+
+    </Pane>
+
 </AnchorPane>
+

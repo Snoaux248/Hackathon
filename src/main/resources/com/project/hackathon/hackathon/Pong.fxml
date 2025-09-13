@@ -7,12 +7,13 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.shape.Circle?>
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.PongController">
 
-    <GridPane fx:id="score"> <Label> </Label> </GridPane>
+    <GridPane AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0">
+            <Label> Score: 0 </Label>
+    </GridPane>
     <Button fx:id="backToMain" >back</Button>
 
     <Rectangle fx:id="player" AnchorPane.rightAnchor="10" width="20" height="100"></Rectangle>
