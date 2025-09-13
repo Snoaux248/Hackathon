@@ -31,8 +31,8 @@ public class PacmanController {
 
     private List<Rectangle> walls = new ArrayList<>();
 
-    private final int rows = 32;
-    private final int cols = 29;
+    private int rows = 32;
+    private int cols = 29;
     private int[][] wallArray = new int[rows][cols];
 
     private int[][] boardArray =
@@ -109,18 +109,16 @@ public class PacmanController {
                    board.setColumnIndex(r, j);
                    board.getChildren().add(r);
                    int[] temp = {0, 0, 0, 0};
-
-                   /*
-                   if(i > 0 && i < rows-1 && j > 0 && j < cols-1){
-                       temp[0] = boardArray[i][j-1] == 0 ? 1: 0;
-                       temp[1] = boardArray[i+1][j] == 0 ? 1: 0;
-                       temp[2] = boardArray[i][j+1] == 0 ? 1: 0;
-                       temp[3] = boardArray[i-1][j] == 0 ? 1: 0;
-                       r.setStyle(r.getStyle()+"-fx-border-width:"+ 2*temp[1]+","+ 2*temp[2]+","+ 2*temp[3]+","+ 2*temp[0]+";\n");
-                       String h = r.getStyle()+"-fx-border-color:"+helper(temp[1])+" "+helper(temp[2])+" "+helper(temp[3])+" "+helper(temp[0])+";\n";
-                       System.out.println(h);
+                   if(i > 0 && i < (rows-1) && j > 0 && j < (cols-1)){
+                       temp[0] = boardArray[i-1][j] == 0 ? 1: 0;
+                       temp[1] = boardArray[i][j+1] == 0 ? 1: 0;
+                       temp[2] = boardArray[i+1][j] == 0 ? 1: 0;
+                       temp[3] = boardArray[i][j-1] == 0 ? 1: 0;
+                       r.setStyle(r.getStyle()+"-fx-border-width:"+ 2*temp[0]+","+ 2*temp[1]+","+ 2*temp[2]+","+ 2*temp[3]+";\n");
+                       String h = r.getStyle()+"-fx-border-color:"+helper(temp[0])+" "+helper(temp[1])+" "+helper(temp[2])+" "+helper(temp[3])+";\n";
+                       //System.out.println(h);
                        r.setStyle(h);
-                   }*/
+                   }
 
                }
             }
