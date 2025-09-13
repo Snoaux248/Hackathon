@@ -28,8 +28,7 @@ public class HelloController {
     @FXML private Button Pacman;
     @FXML private Button Dino;
 
-    @FXML
-    public void initialize() {
+    @FXML public void initialize() {
         // --- Background image ---
         String bgUrl = Objects.requireNonNull(
                 getClass().getResource("/images/gridstillbackground.png"),
