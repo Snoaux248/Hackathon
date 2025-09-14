@@ -21,7 +21,7 @@
         <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="20" vgap="25">
 
             <columnConstraints>
-                <ColumnConstraints percentWidth="25"/> <!-- its weird but i prefer it this way -->
+                <ColumnConstraints percentWidth="25"/>
                 <ColumnConstraints percentWidth="25"/>
             </columnConstraints>
 
