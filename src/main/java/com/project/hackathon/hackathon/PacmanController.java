@@ -91,7 +91,6 @@ public class PacmanController {
             HelloApplication.primaryStage.getScene().getRoot().requestFocus();
             HelloApplication.primaryStage.getScene().setOnKeyPressed(event -> keyPressed(event));
         });
-
         backToMain.setOnAction(e -> {
             try { Views.getMainView(rootPane); }
             catch (Exception ex) { ex.printStackTrace(); }

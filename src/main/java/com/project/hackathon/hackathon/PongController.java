@@ -126,7 +126,6 @@ public class PongController {
         HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
         HelloApplication.primaryStage.getScene().getRoot().requestFocus();
     }
-
     public void updateGame(){
 
         ball.setY(ball.getY() + ( direction[1]));
