@@ -13,8 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+import javafx.geometry.VPos;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -26,8 +31,8 @@ public class TetrisController {
     @FXML public Button backToMain;
     @FXML public Canvas canvas;
     @FXML public Label scoreLabel;
-    @FXML public Label statusLabel;
-    @FXML public TextArea textBox; // NEW — right-side text box
+    @FXML public Label statusLabel;   // kept for compatibility; no longer used to show pause/over
+    @FXML public TextArea textBox;    // notes box (no pause/over text anymore)
 
     // ---- Game constants ----
     private static final int COLS = 10;
@@ -139,8 +144,12 @@ public class TetrisController {
         // initial draw
         draw();
 
-        // Example: write a welcome message into the text box
-        textBox.setText("Welcome to Tetris!\nUse arrow keys to move, R to restart, P to pause.");
+        // Example: write a welcome message into the text box (no pause/over text here)
+        textBox.setText("Welcome to Tetris!\nUse arrow keys to move, up arrow to rotate, R to restart, P to pause.");
+        textBox.setEditable(false);
+        textBox.setFocusTraversable(false);
+        textBox.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> e.consume());
+        textBox.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> e.consume());
     }
 
     // ---- Game control ----
@@ -151,7 +160,7 @@ public class TetrisController {
         score = 0;
         gameOver = false;
         paused = false;
-        statusLabel.setText("");
+        statusLabel.setText(""); // not used for pause/over anymore
         updateScore();
         spawnNewPiece();
 
@@ -194,10 +203,8 @@ public class TetrisController {
         curCol = 3;
         if (!canFit(curShape, curRow, curCol)) {
             gameOver = true;
-            statusLabel.setText("Game Over — press R to restart");
-            if (textBox != null) {
-                textBox.appendText("\nGame Over!");
-            }
+            statusLabel.setText(""); // no label text
+            // do NOT append Game Over to notes; overlay will show it
         }
     }
 
@@ -212,10 +219,9 @@ public class TetrisController {
 
         if (e.getCode() == KeyCode.P) {
             paused = !paused;
-            statusLabel.setText(paused ? "Paused" : "");
-            if (textBox != null) {
-                textBox.appendText(paused ? "\nGame paused." : "\nGame resumed.");
-            }
+            statusLabel.setText(""); // no label text
+            // do NOT append pause/resume to notes; overlay will show it
+            draw();
             return;
         }
 
@@ -371,7 +377,7 @@ public class TetrisController {
             }
         }
 
-        // current piece
+        // current piece (hide when game over)
         if (!gameOver) {
             Color col = COLORS[curColorIndex];
             for (int r = 0; r < 4; r++) {
@@ -386,6 +392,13 @@ public class TetrisController {
                 }
             }
         }
+
+        // ---- Overlay for paused / game over ----
+        if (paused || gameOver) {
+            drawOverlay(g,
+                    gameOver ? "YOU LOST" : "PAUSED",
+                    gameOver ? "Press R to restart" : "Press P to resume • R to restart");
+        }
     }
 
     private void fillCell(GraphicsContext g, int x, int y, Color col) {
@@ -395,5 +408,27 @@ public class TetrisController {
         g.fillRect(px + 1, py + 1, CELL - 2, CELL - 2);
         g.setStroke(col.deriveColor(0, 1, 0.6, 1));
         g.strokeRect(px + 0.5, py + 0.5, CELL - 1, CELL - 1);
+    }
+
+    // ---- Overlay helper ----
+    private void drawOverlay(GraphicsContext g, String main, String sub) {
+        double w = canvas.getWidth();
+        double h = canvas.getHeight();
+
+        // dimmed scrim
+        g.setFill(Color.rgb(0, 0, 0, 0.65));
+        g.fillRect(0, 0, w, h);
+
+        // centered text
+        g.setTextAlign(TextAlignment.CENTER);
+        g.setTextBaseline(VPos.CENTER);
+
+        g.setFill(Color.WHITE);
+        g.setFont(Font.font("System", FontWeight.EXTRA_BOLD, 56));
+        g.fillText(main, w / 2.0, h / 2.0 - 10);
+
+        g.setFont(Font.font("System", FontWeight.SEMI_BOLD, 20));
+        g.setFill(Color.web("#DDDDDD"));
+        g.fillText(sub, w / 2.0, h / 2.0 + 34);
     }
 }
