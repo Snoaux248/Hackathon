@@ -53,7 +53,7 @@
 
     <!-- Score Text -->
     <Text fx:id="scoreText" text="Score: 0"
-          layoutX="570" layoutY="200"
+          layoutX="650" layoutY="200"
           textAlignment="CENTER">
         <effect>
             <DropShadow radius="4" color="#00fff7"/>
