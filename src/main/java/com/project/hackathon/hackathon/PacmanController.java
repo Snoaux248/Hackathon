@@ -163,22 +163,6 @@ public class PacmanController {
         rootPane.getChildren().add(pellet);*/
     }
 
-    private void floodFill(int r, int c, boolean[][] reachable) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{r,c});
-        while (!queue.isEmpty()) {
-            int[] p = queue.poll();
-            int row = p[0], col = p[1];
-            if (row < 0 || row >= rows || col < 0 || col >= cols) continue;
-            if (reachable[row][col] || boardArray[row][col] == 1) continue;
-            reachable[row][col] = true;
-            queue.add(new int[]{row+1,col});
-            queue.add(new int[]{row-1,col});
-            queue.add(new int[]{row,col+1});
-            queue.add(new int[]{row,col-1});
-        }
-    }
-
     public void keyPressed(javafx.scene.input.KeyEvent event) {
         if (event.getCode() == KeyCode.UP) direction = 0;
         else if (event.getCode() == KeyCode.DOWN) direction = 1;
@@ -218,7 +202,7 @@ public class PacmanController {
             break;
             case 3:
                 //left -2c
-                if(pacmanCol - 2 > 0 && boardArray[pacmanRow][pacmanCol-2] != 1 && boardArray[pacmanRow-1][pacmanCol-2] != 1){
+                if(pacmanCol - 2 >= 0 && boardArray[pacmanRow][pacmanCol-2] != 1 && boardArray[pacmanRow-1][pacmanCol-2] != 1){
                     pacmanCol--;
                 }
             break;
@@ -244,9 +228,22 @@ public class PacmanController {
     public void buildDots(){
         for(int i = 0; i < rows-1; i++){
             for(int j = 0; j < cols-1; j++){
+                if(i == 11 || i == 17){
+                    if(j >= 0 && j < 4 || j >= 24 && j < cols) {
+                        continue;
+                    }
+                }
+                if(i == 14){
+                    if(j >= 12 && j < 16) {
+                        continue;
+                    }
+                }
                 if(boardArray[i][j] == 0 && boardArray[i+1][j] == 0 && boardArray[i][j+1] == 0 && boardArray[i+1][j+1] == 0){
                     Circle newPellet = new Circle();
                     newPellet.setRadius(2.5);
+                    if((i == 3 || i == 22) && (j == 1 || j == 26)){
+                        newPellet.setRadius((double)7);
+                    }
                     newPellet.getStyleClass().add("pellet");
                     newPellet.setCenterX(((double)(j+1) * (imageWidth/cols)*.99) + boardOffsets[0] +4);
                     newPellet.setCenterY(((double)(i) * (imageHeight/rows)*.99) + boardOffsets[1] +10);

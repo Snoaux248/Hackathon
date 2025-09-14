@@ -228,16 +228,19 @@ public class PongController {
             }
         }
     }
+
     public void incrementPScore(){
         pScoreI++;
         turn = true;
         Score.setText(cScoreI+" : "+pScoreI);
     }
+
     public void incrementBScore(){
         cScoreI++;
         turn = false;
         Score.setText(cScoreI+" : "+pScoreI);
     }
+
     public static float[] systemSolve(float a1, float b1, float c1, float a2, float b2, float c2){
         float[] temp = {0, 0};
         float d = a1*b2 - a2*b1;
