@@ -6,7 +6,9 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane fx:id="rootPane"
             xmlns="http://javafx.com/javafx"
@@ -14,33 +16,53 @@
             fx:controller="com.project.hackathon.hackathon.TetrisController"
             prefHeight="700.0" prefWidth="800.0">
 
-    <!-- Top bar -->
+    <!-- Top bar (Back + optional status). Score is below, centered above canvas. -->
     <HBox spacing="12"
           AnchorPane.topAnchor="10.0"
           AnchorPane.leftAnchor="10.0"
           AnchorPane.rightAnchor="10.0">
         <Button fx:id="backToMain" text="Back"/>
-        <Label fx:id="scoreLabel" text="Score: 0" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
         <Label fx:id="statusLabel" text="" style="-fx-font-size: 14px; -fx-text-fill: #777;"/>
     </HBox>
 
-    <!-- Main content: game canvas (left) + text box (right) -->
-    <HBox spacing="20"
-          AnchorPane.topAnchor="50.0"
-          AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0"
-          AnchorPane.bottomAnchor="0.0"
-          alignment="CENTER">
+    <!-- Main content: 2-row grid. Row 0: headers. Row 1: canvas + notes aligned top. -->
+    <GridPane hgap="20" vgap="8"
+              AnchorPane.topAnchor="50.0"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0"
+              AnchorPane.bottomAnchor="0.0">
 
-        <!-- Fixed-size game canvas (10×20 grid @ 30px = 300×600) -->
-        <Canvas fx:id="canvas" width="300.0" height="600.0"/>
+        <columnConstraints>
+            <!-- Left column centered header (score), right column normal -->
+            <ColumnConstraints percentWidth="60"/>
+            <ColumnConstraints percentWidth="30"/>
+        </columnConstraints>
 
-        <!-- Right side panel -->
-        <VBox spacing="10">
-            <Label text="Notes" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-            <TextArea fx:id="textBox" prefWidth="200.0" prefHeight="600.0" wrapText="true"/>
-        </VBox>
+        <rowConstraints>
+            <!-- Header row: fixed height to keep both sides aligned -->
+            <RowConstraints minHeight="28" prefHeight="28" maxHeight="28"/>
+            <!-- Content row fills remaining space -->
+            <RowConstraints vgrow="ALWAYS"/>
+        </rowConstraints>
 
-    </HBox>
+        <!-- Row 0 (headers) -->
+        <Label fx:id="scoreLabel"
+               text="Score: 0" GridPane.halignment="CENTER"
+               GridPane.rowIndex="0" GridPane.columnIndex="0"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <Label text="Game Log" GridPane.halignment="CENTER"
+               GridPane.rowIndex="0" GridPane.columnIndex="1"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <!-- Row 1 (content) -->
+        <Canvas fx:id="canvas"
+                width="300.0" height="600.0" GridPane.halignment="CENTER"
+                GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+
+        <TextArea fx:id="textBox"
+                  prefWidth="220.0" prefHeight="600.0" wrapText="true"
+                  GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
 
 </AnchorPane>
