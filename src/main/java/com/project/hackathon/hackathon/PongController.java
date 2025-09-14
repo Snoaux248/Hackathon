@@ -38,7 +38,7 @@ public class PongController {
 
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
-    public boolean gameOver = false;
+    public boolean gameOver = true;
     public int[] direction = new  int[] {0, 0};
     public int pScoreI = 0;
     public int cScoreI = 0;
@@ -67,7 +67,7 @@ public class PongController {
             HelloApplication.primaryStage.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, event -> {
                 keys.put(event.getCode(), false);
             });
-            //HelloApplication.primaryStage.getScene().setOnKeyPressed(event -> keyPressed(event));
+            HelloApplication.primaryStage.getScene().setOnKeyPressed(event -> keyPressed(event));
         });
 
         BotL.setOnAction(event -> {
@@ -80,17 +80,6 @@ public class PongController {
         });
         Start.setOnAction(event -> {
             initializeGame();
-            pScoreI = 0;
-            cScoreI = 0;
-            if (Start.getText().equals("Start Game")) {
-                gameLoop.start();
-            } else {
-                gameOver = false;
-            }
-            StartMenu.setVisible(false);
-            StartMenu.setManaged(false);
-            HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
-            HelloApplication.primaryStage.getScene().getRoot().requestFocus();
         });
         ball.setY((int)HelloApplication.primaryStage.getScene().getHeight()/2);
         ball.setX((int)HelloApplication.primaryStage.getScene().getWidth()/2);
@@ -123,6 +112,19 @@ public class PongController {
 
         direction[0] = rand.nextInt(10) +1;
         direction[1] = rand.nextInt(10) +1;
+
+        pScoreI = 0;
+        cScoreI = 0;
+
+        if (Start.getText().equals("Start Game")) {
+            gameLoop.start();
+        }
+        Score.setText("0 : 0");
+        gameOver = false;
+        StartMenu.setVisible(false);
+        StartMenu.setManaged(false);
+        HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
+        HelloApplication.primaryStage.getScene().getRoot().requestFocus();
     }
 
     public void updateGame(){
@@ -257,22 +259,9 @@ public class PongController {
 
     public void keyPressed(javafx.scene.input.KeyEvent event) {
         System.out.println("Pong "+ event.getCode());
-        if (event.getCode() == KeyCode.UP) {
-            if ((player.getY() - 20) > (-20)){
-                player.setY(player.getY() -20);
-            }
-        } else if (event.getCode() == KeyCode.DOWN) {
-            if ((player.getY() + 20) < ((int)HelloApplication.primaryStage.getScene().getHeight() -80)){
-                player.setY(player.getY() + 20);
-            }
-        }
-        if (event.getCode() == KeyCode.W) {
-            if ((clanker.getY() - 20) > (-20)){
-                clanker.setY(clanker.getY() -20);
-            }
-        } else if (event.getCode() == KeyCode.S) {
-            if ((clanker.getY() + 20) < ((int)HelloApplication.primaryStage.getScene().getHeight() -80)){
-                clanker.setY(clanker.getY() + 20);
+        if(event.getCode() == KeyCode.SPACE){
+            if(gameOver == true){
+                initializeGame();
             }
         }
     }
