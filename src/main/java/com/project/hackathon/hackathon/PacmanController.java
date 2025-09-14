@@ -15,6 +15,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 
 public class PacmanController {
 
@@ -29,6 +30,8 @@ public class PacmanController {
     private int pacmanRow = 2;
     private int pacmanCol = 2;
     private int direction = 0;
+
+    private int pelletCount = 0;
 
     private double pacmanOffsetY = -6; // shift Pacman slightly up
     private double pacmanOffsetX = -4; // shift slightly left
@@ -142,8 +145,8 @@ public class PacmanController {
 
         double radius = scale / 2.2;
         Pacman.setRadius(radius*2);
-        AnchorPane.setLeftAnchor(Pacman, boardOffsets[0] + pacmanCol*scale + scale/2 - radius + pacmanOffsetX);
-        AnchorPane.setTopAnchor(Pacman, boardOffsets[1] + pacmanRow*scale + scale/2 - radius + pacmanOffsetY);
+        Pacman.setCenterX((double)(pacmanCol * (imageWidth/cols)*.99) + boardOffsets[0] );
+        Pacman.setCenterY((double)(pacmanRow * (imageHeight/rows)*.99) + boardOffsets[1] );
 
         rootPane.getChildren().removeIf(node -> node instanceof Circle && node != Pacman);
         //spawnPellets(scale);
@@ -221,9 +224,23 @@ public class PacmanController {
                 }
             break;
         }
-        double radius = Pacman.getRadius();
-        AnchorPane.setLeftAnchor(Pacman, (double)(pacmanCol * (imageWidth/cols)*.99) + boardOffsets[0] -14);
-        AnchorPane.setTopAnchor(Pacman,  (double)(pacmanRow * (imageHeight/rows)*.99) + boardOffsets[1] - 25);
+        checkCollision();
+        Pacman.setCenterX((double)(pacmanCol * (imageWidth/cols)*.99) + boardOffsets[0] +5);
+        Pacman.setCenterY((double)(pacmanRow * (imageHeight/rows)*.99) + boardOffsets[1] -10);
+    }
+    public void checkCollision(){
+        Set<Node> temp = rootPane.lookupAll(".pellet");
+        for(Node node : temp){
+            double x1 = (double)((Circle)node).getCenterX();
+            double x2 = Pacman.getCenterX();
+            double y1 = (double)((Circle)node).getCenterY();
+            double y2 = Pacman.getCenterY();
+            if(Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)) < 5){
+                rootPane.getChildren().remove(node);
+                pelletCount += 1;
+            }
+        }
+        System.out.println("Pellet count: " + pelletCount);
     }
     public void buildDots(){
         for(int i = 0; i < rows-1; i++){
@@ -232,9 +249,8 @@ public class PacmanController {
                     Circle newPellet = new Circle();
                     newPellet.setRadius(2.5);
                     newPellet.getStyleClass().add("pellet");
-                    System.out.println(newPellet);
-                    AnchorPane.setLeftAnchor(newPellet, ((double)(j+1) * (imageWidth/cols)*.99) + boardOffsets[0] +2);
-                    AnchorPane.setTopAnchor(newPellet, ((double)(i) * (imageHeight/rows)*.99) + boardOffsets[1]+10);
+                    newPellet.setCenterX(((double)(j+1) * (imageWidth/cols)*.99) + boardOffsets[0] +4);
+                    newPellet.setCenterY(((double)(i) * (imageHeight/rows)*.99) + boardOffsets[1] +10);
                     rootPane.getChildren().add(newPellet);
                 }
             }
