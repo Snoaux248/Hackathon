@@ -30,8 +30,8 @@ This is a JavaFX application capable of running pong, tetris, dino game, and Pac
 - extract the zip archive
 - extract the given archive browse to 'Hackathon'
 - run `cd /%path to project Folder%/Hackathon/src/` in you terminal
-- run `javac Hackatho/*.java` in your terminal to compile the program
-- run `java Hackatho.Main` in your terminal to run the program
+- run `javac Hackathon/*.java` in your terminal to compile the program
+- run `java Hackathon.Main` in your terminal to run the program
 
 
 ## Running the native mac or windows binary
