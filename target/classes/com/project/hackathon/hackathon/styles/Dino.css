@@ -1,0 +1,43 @@
+#rootPane{
+    -fx-background-color: linear-gradient(from 0% 0% to 45% 80%, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    -fx-pref-height: 400px;
+    -fx-pref-width: 600px;
+}
+#ground{
+    -fx-stroke:#bc13fe;
+    -fx-stroke-width: 2;
+}
+#cactus{
+    fx-fill:#39ff14;
+}
+#multi{
+    -fx-spacing: 5px;
+    -fx-alignment: bottom_center;
+}
+HBox Rectangle{
+    -fx-fill:#39ff14;
+}
+#scoreText{
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #00fff7;
+}
+#gameOverText{
+    -fx-font-size:36px;
+    -fx-font-weight:bold;
+    -fx-fill:#ff073a;
+}
+#restartButton{
+    -fx-background-color:black;
+    -fx-text-fill:#ff073a;
+    -fx-font-weight:bold;
+}
+#backToMain{
+    -fx-background-color:black;
+    -fx-text-fill: #555;
+    -fx-pref-width: 80px;
+    -fx-pref-height: 20px;
+    -fx-font-weight:bold;
+    -fx-font-size: 20px;
+    -fx-background-radius: 10px 10px 10px 10px;
+}
