@@ -16,6 +16,6 @@
         <!-- Pac-Man starts as a Circle, will be wrapped in StackPane in controller -->
         <Circle fx:id="Pacman" radius="10" fill="YELLOW"/>
     </GridPane>
-
+    <!-- -->
     <Button fx:id="backToMain" layoutX="10" layoutY="10" text="Back"/>
 </AnchorPane>
