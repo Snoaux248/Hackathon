@@ -191,7 +191,7 @@ public class PacmanController {
         else if (event.getCode() == KeyCode.RIGHT) direction = 2;
         else if (event.getCode() == KeyCode.LEFT) direction = 3;
     }
-
+//pass
     public void updateGame() {
         switch(direction){
             case 0: if(pacmanRow-1>=0 && boardArray[pacmanRow-1][pacmanCol]!=1) movePackman(0); break;
