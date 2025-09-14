@@ -220,7 +220,7 @@ public class PacmanController {
                 //right +1c
                 if(pacmanCol + 1 <= cols && boardArray[pacmanRow][pacmanCol+1] != 1 && boardArray[pacmanRow-1][pacmanCol+1] != 1){
                     pacmanCol++;
-                    if(pacmanCol == 27 && pacmanRow == 15){
+                    if(pacmanCol == 28 && pacmanRow == 15){
                         pacmanCol = 1;
                     }
                 }
@@ -263,6 +263,9 @@ public class PacmanController {
             double y1 = (double)((Circle)node).getCenterY();
             double y2 = Pacman.getCenterY();
             if(Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)) < 5){
+                if(((Circle)node).getStyleClass().contains("bigPellet")){
+                    System.out.println("BigPellet");
+                }
                 rootPane.getChildren().remove(node);
                 pelletCount += 1;
             }
@@ -287,6 +290,7 @@ public class PacmanController {
                     newPellet.setRadius(2.5);
                     if((i == 3 || i == 22) && (j == 1 || j == 26)){
                         newPellet.setRadius((double)7);
+                        newPellet.getStyleClass().add("bigPellet");
                     }
                     newPellet.getStyleClass().add("pellet");
                     newPellet.setCenterX(((double)(j+1) * (imageWidth/cols)*.99) + boardOffsets[0] +4);
