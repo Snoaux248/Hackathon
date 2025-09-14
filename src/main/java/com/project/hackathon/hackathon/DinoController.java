@@ -27,7 +27,7 @@ public class DinoController {
     // Dino physics
     private double velocityY = 0;
     private final double gravity = 0.5;
-    private final double jumpStrength = 10;
+    private final double jumpStrength = 12;
     private boolean jumping = false;
 
     // Cactus movement

@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
+import javafx.scene.text.Text;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -26,9 +27,9 @@ public class PongController {
     @FXML public Rectangle player;
     @FXML public Rectangle clanker;
     @FXML public Rectangle ball;
+    @FXML public Text gameOverText;
 
-    @FXML public Label pScore;
-    @FXML public Label cScore;
+    @FXML public Label Score;
 
     @FXML public CheckBox BotL;
     @FXML public CheckBox BotR;
@@ -91,6 +92,10 @@ public class PongController {
             HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
             HelloApplication.primaryStage.getScene().getRoot().requestFocus();
         });
+        ball.setY((int)HelloApplication.primaryStage.getScene().getHeight()/2);
+        ball.setX((int)HelloApplication.primaryStage.getScene().getWidth()/2);
+        player.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
+        clanker.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
 
     }
 
@@ -225,12 +230,12 @@ public class PongController {
     public void incrementPScore(){
         pScoreI++;
         turn = true;
-        pScore.setText("Score: "+ pScoreI);
+        Score.setText(cScoreI+" : "+pScoreI);
     }
     public void incrementBScore(){
         cScoreI++;
         turn = false;
-        cScore.setText("Score: "+ cScoreI);
+        Score.setText(cScoreI+" : "+pScoreI);
     }
     public static float[] systemSolve(float a1, float b1, float c1, float a2, float b2, float c2){
         float[] temp = {0, 0};
@@ -245,6 +250,8 @@ public class PongController {
         gameOver = true;
         StartMenu.setManaged(true);
         StartMenu.setVisible(true);
+        gameOverText.setManaged(true);
+        gameOverText.setVisible(true);
         Start.setText("Play Again");
     }
 
