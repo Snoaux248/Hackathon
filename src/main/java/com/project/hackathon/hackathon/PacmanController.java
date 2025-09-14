@@ -35,8 +35,7 @@ public class PacmanController {
     private int pelletCount = 0;
 
     private ImageView pacmanSprite;
-
-
+    private Image invertedPacman;
     private double pacmanOffsetY = -6; // shift Pacman slightly up
     private double pacmanOffsetX = -4; // shift slightly left
 
@@ -83,9 +82,9 @@ public class PacmanController {
 
     public void initialize() {
         pacmanImage.setImage(new Image(getClass().getResource("/images/Pacman.png").toExternalForm()));
-        Image pacmanPNG = new Image(
-                getClass().getResource("/images/PacmanCharacter.png").toExternalForm()
-        );
+        Image pacmanPNG = new Image( getClass().getResource("/images/PacmanCharacter.png").toExternalForm());
+        invertedPacman = new Image(getClass().getResource("/images/InvertedCharacter.png").toExternalForm());
+
         pacmanSprite = new ImageView(pacmanPNG);
         pacmanSprite.setPreserveRatio(true);
         pacmanSprite.setFitWidth(30); // adjust size to match your circle
@@ -266,6 +265,7 @@ public class PacmanController {
             if(Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)) < 5){
                 if(((Circle)node).getStyleClass().contains("bigPellet")){
                     System.out.println("BigPellet");
+                    bigPellet();
                 }
                 rootPane.getChildren().remove(node);
                 pelletCount += 1;
@@ -291,7 +291,6 @@ public class PacmanController {
                     newPellet.setRadius(2.5);
                     if((i == 3 || i == 22) && (j == 1 || j == 26)){
                         newPellet.setRadius((double)7);
-                        bigPellet();
                         newPellet.getStyleClass().add("bigPellet");
                     }
                     newPellet.getStyleClass().add("pellet");
@@ -304,6 +303,7 @@ public class PacmanController {
     }
     public void bigPellet(){
         //make 2nd image appear
+        pacmanSprite.setImage(invertedPacman);
 
     }
 }
