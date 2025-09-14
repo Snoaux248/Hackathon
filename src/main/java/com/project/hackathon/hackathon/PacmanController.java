@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -290,6 +291,7 @@ public class PacmanController {
                     newPellet.setRadius(2.5);
                     if((i == 3 || i == 22) && (j == 1 || j == 26)){
                         newPellet.setRadius((double)7);
+                        bigPellet();
                         newPellet.getStyleClass().add("bigPellet");
                     }
                     newPellet.getStyleClass().add("pellet");
@@ -299,5 +301,9 @@ public class PacmanController {
                 }
             }
         }
+    }
+    public void bigPellet(){
+        //make 2nd image appear
+
     }
 }
