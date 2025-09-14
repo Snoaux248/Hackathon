@@ -38,28 +38,9 @@ This is a JavaFX application capable of running pong, tetris, dino game, and Pac
 - Both of these use Java abd JavaFX 24, however they should be bundled with the necessary packages to run without any user interaction
 - extract the given archive browse to 'demo'
 
-### For mac
-- double click on the provided MustafaCart.dmg
-- drag the app to the applications folder
-- open launchpad or `⌘` + `Space`
-- type in MustafaCart (may take a few seconds to move to Applications folder be patient)
-- allow it to access requested folders
-- if it says cannot open application from unverified developer
-    - `Open settings` → `privacy and security`
-    - scroll down and click open app from unverified developer
-    - relaunch the application
-- Program Files are stored in `/Users/user/Library/MustafaCart`
-
-### For windows
-- double click the provided MustafaCart.exe
-- Allow app to make changes to your computer if prompted
-- app should appear on your desktop
-- if an error occours when running it disable windows defender or your anti-virus or allow an exception for the app
-- Program Files are stored in `C:\Program Files\MustafaCart`
-
 
 ## Manual compilation
-### for manual native binary cimpilation on mac you will need
+### for manual native binary compilation on Mac you will need
 - homebrew
 - maven
 - java-jdk-24.x
@@ -70,21 +51,20 @@ This is a JavaFX application capable of running pong, tetris, dino game, and Pac
 - ``` 
     jpackage \
       --type dmg \
-      --name MustafaCart \
+      --name Legacies \
       --input "'path to package'/demo/target" \
-      --main-jar demo-1.0-SNAPSHOT.jar \
-      --main-class com.project.three.demo.HelloApplication \
+      --main-jar hackathon-1.0-SNAPSHOT.jar \
+      --main-class com.project.hackathon.hackathon.HelloApplication \
       --java-options "--enable-native-access=ALL-UNNAMED" \
       --add-modules java.base,javafx.controls,javafx.fxml,javafx.graphics,java.logging,  \
       --module-path "$JAVA_HOME/jmods:'path to javafx-sdk'/javafx-sdk-mac-24.0.2/lib"  \
       --java-options "-Dprism.verbose=true -Djava.library.path='path to project'/demo/javafx-sdk-mac-24.0.2/lib" \
-      --icon 'path to project'/demo/Mustafa.icns \
-      --mac-package-identifier com.example.project3 \
-      --mac-package-name MustafaCart \
+      --mac-package-identifier com.example.hackathon \
+      --mac-package-name Legacies \
       --verbose 
       ```
 
-### for manual native binary cimpilation on windows you will need
+### for manual native binary compilation on windows you will need
 - choco "for maven install"
 - Wix toolset
 - maven
@@ -92,19 +72,18 @@ This is a JavaFX application capable of running pong, tetris, dino game, and Pac
 - javafx-sdk-24.x (for windows)
 - javafx-jmods-24.x (for windows)
 
-- then run these two commands when in the project directory:(Note same as mac diffrent than terminal)
+- then run these two commands when in the project directory:(Note same as mac different from terminal)
 - `mvn clean package`
 - ``` 
     jpackage ^
       --type exe ^
-      --name MustafaCart ^
-      --input "'path to project'\demo\target" ^
-      --main-jar demo-1.0-SNAPSHOT.jar ^
-      --main-class com.project.three.demo.HelloApplication ^
+      --name Legacies ^
+      --input "'path to project'\Hackathon\target" ^
+      --main-jar Hackathon-1.0-SNAPSHOT.jar ^
+      --main-class com.project.hackathon.hackathon.HelloApplication ^
       --java-options "--enable-native-access=ALL-UNNAMED -Dprism.verbose=true -Djava.library.path='path to javafx-sdk'\lib" ^
       --add-modules java.base,javafx.controls,javafx.fxml,javafx.graphics,java.logging ^
       --module-path "%JAVA_HOME%\jmods;C:'path to javfx-jmods'\javafx-jmods-24.0.2" ^
-      --icon "'path to project'\Mustafa.ico" ^
       --win-menu ^
       --win-shortcut ^
       --verbose 
