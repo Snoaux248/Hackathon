@@ -28,8 +28,8 @@ public class PacmanController {
 
     private final int rows = 32;
     private final int cols = 29;
-    private int pacmanRow = 2;
-    private int pacmanCol = 2;
+    private int pacmanRow = 30;
+    private int pacmanCol = 15;
     private int direction = 0;
 
     private int pelletCount = 0;
