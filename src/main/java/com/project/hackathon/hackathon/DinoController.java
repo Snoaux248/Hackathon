@@ -14,35 +14,41 @@ import javafx.scene.text.Text;
 import java.util.Random;
 
 public class DinoController {
-    @FXML public AnchorPane rootPane;
-    @FXML public Button backToMain;
-    @FXML public Rectangle dino;
-    @FXML public Rectangle cactus;
-    @FXML public Line ground;
-    @FXML public Text gameOverText;
-    @FXML public Button restartButton;
-    @FXML public HBox multi;
+    @FXML private AnchorPane rootPane;
+    @FXML private Button backToMain;
+    @FXML private Rectangle dino;
+    @FXML private Rectangle cactus;
+    @FXML private Line ground;
+    @FXML private Text gameOverText;
+    @FXML private Button restartButton;
+    @FXML private HBox multi;
+    @FXML private Text scoreText; // from FXML
 
+    // Dino physics
     private double velocityY = 0;
     private final double gravity = 0.5;
     private final double jumpStrength = 10;
     private boolean jumping = false;
 
+    // Cactus movement
     private double cactusSpeed = 4;
     private boolean gameOver = false;
     private boolean useMultiCactus = false;
 
+    // Game loop and timing
     private AnimationTimer gameLoop;
     private Random random = new Random();
-
-    // Fixed timestep variables
     private final double FPS = 60.0;
-    private final double dt = 1.0 / FPS; // ~0.0167 seconds
+    private final double dt = 1.0 / FPS;
     private double accumulator = 0;
     private long lastTime = System.nanoTime();
 
+    // Score (time-based)
+    private double score = 0;
+    private final double SCORE_RATE = 60; // points per second
+
     public void initialize() {
-        // Ground line bound to window size
+        // Ground line bound to window width
         ground.endXProperty().bind(rootPane.widthProperty());
 
         // Back button
@@ -54,7 +60,7 @@ public class DinoController {
         // Restart button
         restartButton.setOnAction(event -> resetGame());
 
-        // Jumping and reset with spacebar
+        // Key input for jumping and reset
         Platform.runLater(() -> {
             rootPane.setFocusTraversable(true);
             rootPane.requestFocus();
@@ -70,11 +76,11 @@ public class DinoController {
         // Initialize first cactus
         initializeNextCactus();
 
-        // Game loop
+        // Game loop with fixed timestep
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                double delta = (now - lastTime) / 1_000_000_000.0; // convert ns to seconds
+                double delta = (now - lastTime) / 1_000_000_000.0;
                 lastTime = now;
                 accumulator += delta;
 
@@ -88,11 +94,17 @@ public class DinoController {
     }
 
     private void updateGameFixed(double dt) {
-        // Gravity
-        velocityY += gravity * dt * 60; // scale to match old speed
+        // Update timer-based score
+        if (!gameOver) {
+            score += SCORE_RATE * dt;
+            scoreText.setText("Score: " + (int) score);
+        }
+
+        // Apply gravity to dino
+        velocityY += gravity * dt * 60;
         dino.setY(dino.getY() + velocityY * dt * 60);
 
-        // Stop at ground
+        // Stop dino at ground
         double groundY = ground.getStartY() - dino.getHeight();
         if (dino.getY() >= groundY) {
             dino.setY(groundY);
@@ -100,19 +112,15 @@ public class DinoController {
             jumping = false;
         }
 
-        // Move Cactus
+        // Move cactus / multi-cactus
         double move = cactusSpeed * dt * 60;
         if (useMultiCactus) {
             multi.setLayoutX(multi.getLayoutX() - move);
-
             if (multi.getLayoutX() + getMaxWidth(multi) < 0) initializeNextCactus();
-
             if (dino.getBoundsInParent().intersects(multi.getBoundsInParent())) triggerGameOver();
         } else {
             cactus.setX(cactus.getX() - move);
-
             if (cactus.getX() + cactus.getWidth() < 0) initializeNextCactus();
-
             if (dino.getBoundsInParent().intersects(cactus.getBoundsInParent())) triggerGameOver();
         }
     }
@@ -131,6 +139,9 @@ public class DinoController {
         velocityY = 0;
         jumping = false;
 
+        score = 0;
+        scoreText.setText("Score: 0");
+
         dino.setY(ground.getStartY() - dino.getHeight());
         initializeNextCactus();
 
@@ -143,20 +154,16 @@ public class DinoController {
         if (useMultiCactus) {
             multi.setVisible(true);
             cactus.setVisible(false);
-
             for (var node : multi.getChildren()) {
                 Rectangle r = (Rectangle) node;
-                r.setWidth(15 + random.nextDouble() * 15);
+                r.setWidth(15 + random.nextDouble());
                 r.setHeight(20 + random.nextDouble() * 30);
             }
-
             multi.setLayoutX(rootPane.getWidth() + random.nextDouble() * 400);
             multi.setLayoutY(ground.getStartY() - getMaxHeight(multi));
-
         } else {
             cactus.setVisible(true);
             multi.setVisible(false);
-
             cactus.setWidth(15 + random.nextDouble() * 15);
             cactus.setHeight(20 + random.nextDouble() * 30);
             cactus.setY(ground.getStartY() - cactus.getHeight());
