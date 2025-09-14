@@ -1,4 +1,5 @@
 package com.project.hackathon.hackathon;
+
 //<!-- gahhh -->
 
 import javafx.animation.Animation;
@@ -9,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -25,6 +27,7 @@ public class TetrisController {
     @FXML public Canvas canvas;
     @FXML public Label scoreLabel;
     @FXML public Label statusLabel;
+    @FXML public TextArea textBox; // NEW — right-side text box
 
     // ---- Game constants ----
     private static final int COLS = 10;
@@ -135,6 +138,9 @@ public class TetrisController {
 
         // initial draw
         draw();
+
+        // Example: write a welcome message into the text box
+        textBox.setText("Welcome to Tetris!\nUse arrow keys to move, R to restart, P to pause.");
     }
 
     // ---- Game control ----
@@ -148,6 +154,10 @@ public class TetrisController {
         statusLabel.setText("");
         updateScore();
         spawnNewPiece();
+
+        if (textBox != null) {
+            textBox.appendText("\nGame reset!\n");
+        }
     }
 
     private void tick() {
@@ -166,6 +176,9 @@ public class TetrisController {
                     default -> 0;
                 };
                 updateScore();
+                if (textBox != null) {
+                    textBox.appendText("\nCleared " + cleared + " line(s)!");
+                }
             }
             // next piece
             spawnNewPiece();
@@ -182,6 +195,9 @@ public class TetrisController {
         if (!canFit(curShape, curRow, curCol)) {
             gameOver = true;
             statusLabel.setText("Game Over — press R to restart");
+            if (textBox != null) {
+                textBox.appendText("\nGame Over!");
+            }
         }
     }
 
@@ -197,6 +213,9 @@ public class TetrisController {
         if (e.getCode() == KeyCode.P) {
             paused = !paused;
             statusLabel.setText(paused ? "Paused" : "");
+            if (textBox != null) {
+                textBox.appendText(paused ? "\nGame paused." : "\nGame resumed.");
+            }
             return;
         }
 
@@ -223,6 +242,9 @@ public class TetrisController {
             case SPACE -> { // hard drop
                 while (canFit(curShape, curRow + 1, curCol)) curRow++;
                 tick(); // lock and continue
+                if (textBox != null) {
+                    textBox.appendText("\nHard drop!");
+                }
             }
             case R -> { // quick restart
                 resetGame();
@@ -375,4 +397,3 @@ public class TetrisController {
         g.strokeRect(px + 0.5, py + 0.5, CELL - 1, CELL - 1);
     }
 }
-
