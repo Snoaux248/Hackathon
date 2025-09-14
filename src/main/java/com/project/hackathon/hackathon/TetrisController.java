@@ -5,16 +5,25 @@ package com.project.hackathon.hackathon;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -22,6 +31,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.geometry.VPos;
 import javafx.util.Duration;
 
+import java.net.URL;
 import java.util.Random;
 
 public class TetrisController {
@@ -31,6 +41,7 @@ public class TetrisController {
     @FXML public Button backToMain;
     @FXML public Canvas canvas;
     @FXML public Label scoreLabel;
+    @FXML public Label gameLogLabel;
     @FXML public Label statusLabel;   // kept for compatibility; no longer used to show pause/over
     @FXML public TextArea textBox;    // notes box (no pause/over text anymore)
 
@@ -129,6 +140,10 @@ public class TetrisController {
             }
         });
 
+        // ======= Set background images (EDIT THESE PATHS) =======
+        setRootBackgroundImage("/images/bg_full.jpg");     // or "file:/C:/path/bg.jpg"
+        setTextBoxBackgroundImage("/images/bg_notes.jpg"); // or "file:/C:/path/bg2.jpg"
+
         // Start a new game
         resetGame();
 
@@ -144,7 +159,17 @@ public class TetrisController {
         // initial draw
         draw();
 
-        // Example: write a welcome message into the text box (no pause/over text here)
+        DropShadow outline = new DropShadow();
+        outline.setColor(Color.BLACK); // outline color switched to black
+        outline.setRadius(3);
+        outline.setSpread(1.0);
+        outline.setOffsetX(0);
+        outline.setOffsetY(0);
+
+        scoreLabel.setEffect(outline);
+        gameLogLabel.setEffect(outline);
+
+        // Game log setup (non-interactive)
         textBox.setText("Welcome to Tetris!\nUse arrow keys to move, up arrow to rotate, R to restart, P to pause.");
         textBox.setEditable(false);
         textBox.setFocusTraversable(false);
@@ -152,6 +177,7 @@ public class TetrisController {
         textBox.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> e.consume());
     }
 
+    // ---- Game control ----
     private void resetGame() {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) board[r][c] = 0;
@@ -203,7 +229,7 @@ public class TetrisController {
         if (!canFit(curShape, curRow, curCol)) {
             gameOver = true;
             statusLabel.setText(""); // no label text
-            // do NOT append Game Over to notes; overlay will show it
+            // overlay handles game over text
         }
     }
 
@@ -219,41 +245,30 @@ public class TetrisController {
         if (e.getCode() == KeyCode.P) {
             paused = !paused;
             statusLabel.setText(""); // no label text
-            // do NOT append pause/resume to notes; overlay will show it
-            draw();
+            draw(); // overlay shows paused
             return;
         }
 
         if (paused) return;
 
         switch (e.getCode()) {
-            case LEFT -> {
-                if (canFit(curShape, curRow, curCol - 1)) curCol--;
-            }
-            case RIGHT -> {
-                if (canFit(curShape, curRow, curCol + 1)) curCol++;
-            }
-            case DOWN -> {
-                if (canFit(curShape, curRow + 1, curCol)) curRow++;
-            }
+            case LEFT -> { if (canFit(curShape, curRow, curCol - 1)) curCol--; }
+            case RIGHT -> { if (canFit(curShape, curRow, curCol + 1)) curCol++; }
+            case DOWN -> { if (canFit(curShape, curRow + 1, curCol)) curRow++; }
             case UP, X -> {
                 int[][] rot = rotateCW(curShape);
                 if (canFit(rot, curRow, curCol)) curShape = rot;
             }
-            case Z -> { // counter-clockwise
+            case Z -> {
                 int[][] rot = rotateCCW(curShape);
                 if (canFit(rot, curRow, curCol)) curShape = rot;
             }
-            case SPACE -> { // hard drop
+            case SPACE -> {
                 while (canFit(curShape, curRow + 1, curCol)) curRow++;
                 tick(); // lock and continue
-                if (textBox != null) {
-                    textBox.appendText("\nHard drop!");
-                }
+                if (textBox != null) textBox.appendText("\nHard drop!");
             }
-            case R -> { // quick restart
-                resetGame();
-            }
+            case R -> resetGame();
             default -> {}
         }
         draw();
@@ -295,53 +310,39 @@ public class TetrisController {
             }
             if (full) {
                 cleared++;
-                // shift everything down
                 for (int rr = r; rr > 0; rr--) {
                     System.arraycopy(board[rr - 1], 0, board[rr], 0, COLS);
                 }
-                // new empty top row
                 for (int c = 0; c < COLS; c++) board[0][c] = 0;
-                r++; // re-check same row index after shift
+                r++;
             }
         }
         return cleared;
     }
 
-    private void updateScore() {
-        scoreLabel.setText("Score: " + score);
-    }
+    private void updateScore() { scoreLabel.setText("Score: " + score); }
 
     // ---- Rotation helpers ----
     private static int[][] rotateCW(int[][] src) {
         int[][] dst = new int[4][4];
         for (int r = 0; r < 4; r++) {
-            for (int c = 0; c < 4; c++) {
-                dst[r][c] = src[4 - 1 - c][r];
-            }
+            for (int c = 0; c < 4; c++) dst[r][c] = src[4 - 1 - c][r];
         }
         return dst;
     }
-
     private static int[][] rotateCCW(int[][] src) {
         int[][] dst = new int[4][4];
         for (int r = 0; r < 4; r++) {
-            for (int c = 0; c < 4; c++) {
-                dst[r][c] = src[c][4 - 1 - r];
-            }
+            for (int c = 0; c < 4; c++) dst[r][c] = src[c][4 - 1 - r];
         }
         return dst;
     }
-
     private static int[][] deepCopy(int[][] m) {
         int[][] copy = new int[m.length][];
-        for (int i = 0; i < m.length; i++) {
-            copy[i] = m[i].clone();
-        }
+        for (int i = 0; i < m.length; i++) copy[i] = m[i].clone();
         return copy;
     }
-
     private int pickColorIndexFor(int[][] shape) {
-        // Map shapes to stable color indices by identity
         if (shape == S_I) return 1;
         if (shape == S_O) return 2;
         if (shape == S_T) return 3;
@@ -359,14 +360,10 @@ public class TetrisController {
         g.setFill(Color.web("#111"));
         g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        // grid backdrop
+        // grid
         g.setStroke(Color.web("#222"));
-        for (int y = 0; y <= ROWS; y++) {
-            g.strokeLine(0, y * CELL, COLS * CELL, y * CELL);
-        }
-        for (int x = 0; x <= COLS; x++) {
-            g.strokeLine(x * CELL, 0, x * CELL, ROWS * CELL);
-        }
+        for (int y = 0; y <= ROWS; y++) g.strokeLine(0, y * CELL, COLS * CELL, y * CELL);
+        for (int x = 0; x <= COLS; x++) g.strokeLine(x * CELL, 0, x * CELL, ROWS * CELL);
 
         // board cells
         for (int r = 0; r < ROWS; r++) {
@@ -379,20 +376,15 @@ public class TetrisController {
         // current piece (hide when game over)
         if (!gameOver) {
             Color col = COLORS[curColorIndex];
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 4; c++) {
-                    if (curShape[r][c] == 1) {
-                        int br = curRow + r;
-                        int bc = curCol + c;
-                        if (br >= 0 && br < ROWS && bc >= 0 && bc < COLS) {
-                            fillCell(g, bc, br, col);
-                        }
-                    }
+            for (int r = 0; r < 4; r++) for (int c = 0; c < 4; c++) {
+                if (curShape[r][c] == 1) {
+                    int br = curRow + r, bc = curCol + c;
+                    if (br >= 0 && br < ROWS && bc >= 0 && bc < COLS) fillCell(g, bc, br, col);
                 }
             }
         }
 
-        // ---- Overlay for paused / game over ----
+        // overlay for paused / game over
         if (paused || gameOver) {
             drawOverlay(g,
                     gameOver ? "YOU LOST" : "PAUSED",
@@ -401,33 +393,113 @@ public class TetrisController {
     }
 
     private void fillCell(GraphicsContext g, int x, int y, Color col) {
-        double px = x * CELL;
-        double py = y * CELL;
+        double px = x * CELL, py = y * CELL;
         g.setFill(col);
         g.fillRect(px + 1, py + 1, CELL - 2, CELL - 2);
         g.setStroke(col.deriveColor(0, 1, 0.6, 1));
         g.strokeRect(px + 0.5, py + 0.5, CELL - 1, CELL - 1);
     }
 
-    // ---- Overlay helper ----
     private void drawOverlay(GraphicsContext g, String main, String sub) {
-        double w = canvas.getWidth();
-        double h = canvas.getHeight();
-
-        // dimmed scrim
-        g.setFill(Color.rgb(0, 0, 0, 0.65));
-        g.fillRect(0, 0, w, h);
-
-        // centered text
-        g.setTextAlign(TextAlignment.CENTER);
-        g.setTextBaseline(VPos.CENTER);
-
-        g.setFill(Color.WHITE);
-        g.setFont(Font.font("System", FontWeight.EXTRA_BOLD, 56));
+        double w = canvas.getWidth(), h = canvas.getHeight();
+        g.setFill(Color.rgb(0, 0, 0, 0.65)); g.fillRect(0, 0, w, h);
+        g.setTextAlign(TextAlignment.CENTER); g.setTextBaseline(VPos.CENTER);
+        g.setFill(Color.WHITE); g.setFont(Font.font("System", FontWeight.EXTRA_BOLD, 56));
         g.fillText(main, w / 2.0, h / 2.0 - 10);
-
         g.setFont(Font.font("System", FontWeight.SEMI_BOLD, 20));
         g.setFill(Color.web("#DDDDDD"));
         g.fillText(sub, w / 2.0, h / 2.0 + 34);
+    }
+
+    // ========= Background helpers =========
+
+    /** Set a cover background image on the whole screen (root AnchorPane). */
+    private void setRootBackgroundImage(String pathOrUrl) {
+        Image img = loadImage(pathOrUrl);
+        if (img == null) return;
+        BackgroundSize size = new BackgroundSize(100, 100, true, true, false, true); // cover
+        BackgroundImage bg = new BackgroundImage(img,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, size);
+        rootPane.setBackground(new Background(bg));
+    }
+
+    /**
+     * Properly styled background for the TextArea:
+     * - Image on the viewport (behind the text; does not scroll with text)
+     * - Semi-transparent scrim on the content for readability
+     * - Rounded corners, padding, and subtle border
+     */
+    private void setTextBoxBackgroundImage(String pathOrUrl) {
+        Image img = loadImage(pathOrUrl);
+        if (img == null) return;
+
+        // Make the TextArea chrome transparent so our custom layers show.
+        textBox.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-control-inner-background: transparent;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-highlight-fill: rgba(255,255,255,0.25);" +
+                        "-fx-highlight-text-fill: white;"
+        );
+
+        Runnable apply = () -> {
+            // ScrollPane and viewport must be transparent so the image is visible.
+            Region scrollPane = (Region) textBox.lookup(".scroll-pane");
+            if (scrollPane != null) {
+                scrollPane.setStyle("-fx-background-color: transparent;");
+            }
+
+            // Put the background IMAGE on the viewport so it doesn't scroll with the text.
+            Region viewport = (Region) textBox.lookup(".viewport");
+            if (viewport != null) {
+                BackgroundSize size = new BackgroundSize(100, 100, true, true, false, true); // cover
+                BackgroundImage bg = new BackgroundImage(
+                        img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER, size
+                );
+                viewport.setBackground(new Background(bg));
+            }
+
+            // Put a semi-transparent scrim + rounding/padding on the CONTENT above the image.
+            Region content = (Region) textBox.lookup(".content");
+            if (content != null) {
+                content.setStyle(
+                        "-fx-background-color: rgba(0,0,0,0.40);" +
+                                "-fx-background-insets: 0;" +
+                                "-fx-background-radius: 10;" +
+                                "-fx-padding: 10;" +
+                                "-fx-border-color: rgba(255,255,255,0.15);" +
+                                "-fx-border-radius: 10;" +
+                                "-fx-border-insets: 0;"
+                );
+            }
+        };
+
+        // Apply after the skin exists (on first layout).
+        if (textBox.getSkin() == null) {
+            textBox.skinProperty().addListener((obs, o, n) -> Platform.runLater(apply));
+        } else {
+            Platform.runLater(apply);
+        }
+    }
+
+    /** Loads an Image from classpath ("/...") or direct URL ("file:/", "http://", etc.). */
+    private Image loadImage(String pathOrUrl) {
+        try {
+            if (pathOrUrl == null || pathOrUrl.isBlank()) return null;
+            if (pathOrUrl.startsWith("file:") || pathOrUrl.startsWith("http")) {
+                return new Image(pathOrUrl, true);
+            }
+            URL url = getClass().getResource(pathOrUrl);
+            if (url == null) {
+                System.err.println("Image not found on classpath: " + pathOrUrl);
+                return null;
+            }
+            return new Image(url.toExternalForm(), true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

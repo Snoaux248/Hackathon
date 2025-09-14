@@ -40,19 +40,18 @@
         <rowConstraints>
             <!-- Header row: fixed height to keep both sides aligned -->
             <RowConstraints minHeight="28" prefHeight="28" maxHeight="28"/>
-            <!-- Content row fills remaining space -->
             <RowConstraints vgrow="ALWAYS"/>
         </rowConstraints>
 
-        <!-- Row 0 (headers) -->
         <Label fx:id="scoreLabel"
                text="Score: 0" GridPane.halignment="CENTER"
                GridPane.rowIndex="0" GridPane.columnIndex="0"
-               style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+               style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF"/>
 
-        <Label text="Game Log" GridPane.halignment="CENTER"
+        <Label fx:id="gameLogLabel"
+               text="Game Log" GridPane.halignment="CENTER"
                GridPane.rowIndex="0" GridPane.columnIndex="1"
-               style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+               style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF"/>
 
         <!-- Row 1 (content) -->
         <Canvas fx:id="canvas"
