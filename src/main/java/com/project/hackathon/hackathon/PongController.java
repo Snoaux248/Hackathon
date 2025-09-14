@@ -30,6 +30,7 @@ public class PongController {
     public int[] direction = new  int[] {0, 0};
     public float velocity = 0;
     public int score = 0;
+    long referenceTime = System.currentTimeMillis();
 
     public void initialize(){
         backToMain.setOnAction(event -> {
@@ -61,7 +62,10 @@ public class PongController {
                     hasStarted = true;
                 }
                 if(!gameOver){
-                    updateGame();
+                    if(System.currentTimeMillis() - referenceTime >= 10) {
+                        updateGame();
+                        referenceTime = System.currentTimeMillis();
+                    }
                 }else{
                     stopGame();
                     hasStarted = false;

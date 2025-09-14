@@ -37,6 +37,9 @@ public class Views {
         AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("Pacman.fxml")));
         stage.getScene().setRoot(pane);
         stage.setTitle("Pacman! ");
+        stage.getScene().getStylesheets().clear();
+        stage.getScene().getStylesheets().add(Objects.requireNonNull(Views.class.getResource("styles/Pacman.css")).toExternalForm());
+
         return pane;
     }
     public static AnchorPane getMainView(AnchorPane rootPane) throws Exception{
