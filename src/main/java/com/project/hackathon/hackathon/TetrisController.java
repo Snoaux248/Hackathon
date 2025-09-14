@@ -161,7 +161,7 @@ public class TetrisController {
 
         DropShadow outline = new DropShadow();
         outline.setColor(Color.BLACK); // outline color switched to black
-        outline.setRadius(3);          // you can tweak thickness
+        outline.setRadius(3);
         outline.setSpread(1.0);
         outline.setOffsetX(0);
         outline.setOffsetY(0);
