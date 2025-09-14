@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import java.util.Random;
 
 public class DinoController {
-    //
+
     @FXML public AnchorPane rootPane;
     @FXML public Button backToMain;
     @FXML public Rectangle dino;
@@ -24,24 +24,23 @@ public class DinoController {
     @FXML public Button restartButton;
     @FXML public HBox multi;
 
-    // Knowledge
+    // Physics
     private double velocityY = 0;
-    private final double gravity = 0.5;
-    private final double jumpStrength = 10;
+    private final double gravity = 800;      // pixels per second²
+    private final double jumpStrength = 400; // pixels per second
     private boolean jumping = false;
 
-    private double cactusSpeed = 4;
-    private AnimationTimer gameLoop;
+    private double cactusSpeed = 200;        // pixels per second
     private boolean gameOver = false;
-    private Random random = new Random();
-
     private boolean useMultiCactus = false;
 
+    private Random random = new Random();
+    private AnimationTimer gameLoop;
+    private long lastUpdate = 0;
+
     public void initialize() {
-        // Ground line bound to window size
         ground.endXProperty().bind(rootPane.widthProperty());
 
-        // Back button
         backToMain.setOnAction(event -> {
             try {
                 Views.getMainView(rootPane);
@@ -50,45 +49,45 @@ public class DinoController {
             }
         });
 
-        // Restart button
         restartButton.setOnAction(event -> resetGame());
 
-        // Jumping and reset with spacebar
         Platform.runLater(() -> {
             rootPane.setFocusTraversable(true);
             rootPane.requestFocus();
             rootPane.getScene().setOnKeyPressed(event -> {
-                // Jump
                 if (event.getCode() == KeyCode.SPACE && !jumping && !gameOver) {
                     velocityY = -jumpStrength;
                     jumping = true;
                 }
-                // Reset after GAME OVER
                 if (gameOver && event.getCode() == KeyCode.SPACE) {
                     resetGame();
                 }
             });
         });
 
-        // Initialize first cactus
         initializeNextCactus();
 
-        // Game loop
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!gameOver) updateGame();
+                if (lastUpdate == 0) {
+                    lastUpdate = now;
+                    return;
+                }
+                double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // seconds
+                lastUpdate = now;
+
+                if (!gameOver) updateGame(deltaTime);
             }
         };
         gameLoop.start();
     }
 
-    private void updateGame() {
-        // Gravity
-        velocityY += gravity;
-        dino.setY(dino.getY() + velocityY);
+    private void updateGame(double deltaTime) {
+        // Update Dino
+        velocityY += gravity * deltaTime;
+        dino.setY(dino.getY() + velocityY * deltaTime);
 
-        // Stop at ground
         double groundY = ground.getStartY() - dino.getHeight();
         if (dino.getY() >= groundY) {
             dino.setY(groundY);
@@ -96,36 +95,20 @@ public class DinoController {
             jumping = false;
         }
 
-        // Move Cactus
+        // Update Cactus
+        double moveAmount = cactusSpeed * deltaTime;
+
         if (useMultiCactus) {
-            multi.setLayoutX(multi.getLayoutX() - cactusSpeed);
-
-            // Reset multi cactus if offscreen
-            if (multi.getLayoutX() + getMaxWidth(multi) < 0) {
-                initializeNextCactus();
-            }
-
-            // Collision detection with each rectangle in multi
-                if (dino.getBoundsInParent().intersects(multi.getBoundsInParent())) {
-                    triggerGameOver();
-
-            }
+            multi.setLayoutX(multi.getLayoutX() - moveAmount);
+            if (multi.getLayoutX() + getMaxWidth(multi) < 0) initializeNextCactus();
+            if (dino.getBoundsInParent().intersects(multi.getBoundsInParent())) triggerGameOver();
         } else {
-            cactus.setX(cactus.getX() - cactusSpeed);
-
-            // Reset cactus if offscreen
-            if (cactus.getX() + cactus.getWidth() < 0) {
-                initializeNextCactus();
-            }
-
-            // Collision detection
-            if (dino.getBoundsInParent().intersects(cactus.getBoundsInParent())) {
-                triggerGameOver();
-            }
+            cactus.setX(cactus.getX() - moveAmount);
+            if (cactus.getX() + cactus.getWidth() < 0) initializeNextCactus();
+            if (dino.getBoundsInParent().intersects(cactus.getBoundsInParent())) triggerGameOver();
         }
     }
 
-    // Game Over Sign
     private void triggerGameOver() {
         gameOverText.setVisible(true);
         restartButton.setVisible(true);
@@ -133,7 +116,6 @@ public class DinoController {
         velocityY = 0;
     }
 
-    // Game Reset
     private void resetGame() {
         gameOverText.setVisible(false);
         restartButton.setVisible(false);
@@ -141,40 +123,28 @@ public class DinoController {
         velocityY = 0;
         jumping = false;
 
-        // Reset dino position
         dino.setY(ground.getStartY() - dino.getHeight());
-
-        // Reset cactus/multi cactus
         initializeNextCactus();
-
         Platform.runLater(() -> rootPane.requestFocus());
     }
 
-    // Initialize cactus or multi cactus randomly
     private void initializeNextCactus() {
-        useMultiCactus = random.nextBoolean(); // 50% chance
+        useMultiCactus = random.nextBoolean();
 
         if (useMultiCactus) {
-            // Multi cactus setup
             multi.setVisible(true);
             cactus.setVisible(false);
 
-            // Randomize rectangle sizes inside multi
             for (var node : multi.getChildren()) {
                 Rectangle r = (Rectangle) node;
-                double w = 15 + random.nextDouble() * 15;
-                double h = 20 + random.nextDouble() * 30;
-                r.setWidth(w);
-                r.setHeight(h);
+                r.setWidth(15 + random.nextDouble() * 15);
+                r.setHeight(20 + random.nextDouble() * 30);
             }
 
-            // Position HBox offscreen and bottom aligned
             double startX = rootPane.getWidth() + random.nextDouble() * 400;
             multi.setLayoutX(startX);
             multi.setLayoutY(ground.getStartY() - getMaxHeight(multi));
-
         } else {
-            // Single cactus setup
             cactus.setVisible(true);
             multi.setVisible(false);
 
@@ -187,7 +157,6 @@ public class DinoController {
         }
     }
 
-    // max height of rectangles in HBox
     private double getMaxHeight(HBox box) {
         double max = 0;
         for (var node : box.getChildren()) {
@@ -197,7 +166,6 @@ public class DinoController {
         return max;
     }
 
-    //total width of rectangles in Hbox
     private double getMaxWidth(HBox box) {
         double width = 0;
         for (var node : box.getChildren()) {
