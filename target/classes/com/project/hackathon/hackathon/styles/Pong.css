@@ -5,19 +5,39 @@ AnchorPane{
 GridPane{
     -fx-pref-width: 100px;
     -fx-pref-height: 100px;
-    -fx-max-width: Infinite;
-    -fx-max-height: 100px;
-    -fx-min-width: Infinite;
-    -fx-min-height: 100px;
     -fx-alignment: center;
 }
 Label{
     -fx-alignment: center;
     -fx-font-size: 60px;
 }
+#ball{
+    -fx-fill: #fff;
+    -fx-arc-height: 10px;
+    -fx-arc-width: 10px;
+}
 #player, #clanker{
     -fx-fill: #caf4f4;
     -fx-arc-height: 10px;
     -fx-arc-width: 10px;
     -fx-effect: dropshadow(gaussian, deepskyblue, 10, 0.3, 0, 0);
+}
+
+#StartMenu VBox{
+    -fx-background-color: #444;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, deepskyblue, 10, 0.3, 0, 0);
+    -fx-padding: 40px;
+    -fx-spacing: 30px;
+    -fx-alignment: left;
+}
+#StartMenu VBox CheckBox{
+    -fx-font-size: 30px;
+    -fx-text-fill: #888;
+}
+#StartMenu VBox Button{
+    -fx-background-color: #333;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #888;
+    -fx-font-size: 30px;
 }

@@ -12,7 +12,17 @@
             fx:controller="com.project.hackathon.hackathon.PongController">
 
     <GridPane AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0">
-            <Label> Score: 0 </Label>
+        <HBox spacing="50">
+            <Label fx:id="cScore"> Score: 0 </Label>
+            <Label fx:id="pScore"> Score: 0 </Label>
+        </HBox>
+    </GridPane>
+    <GridPane fx:id="StartMenu" alignment="center" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <VBox>
+            <CheckBox fx:id="BotL">Enable Bot for left  </CheckBox>
+            <CheckBox fx:id="BotR">Enable Bot for right</CheckBox>
+            <Button fx:id="Start"> Start Game</Button>
+        </VBox>
     </GridPane>
     <Button fx:id="backToMain" >back</Button>
 

@@ -153,12 +153,10 @@
         }
 
         public void updateGame(){
-            System.out.println(direction);
             switch(direction){
                 case 0:
                     if(pacmanRow - 1 > 0){
                         if(boardArray[pacmanRow-1][pacmanCol] != 1){
-                            System.out.println("updateGame UP");
                             move_packman(0);
                         }
                     }
@@ -166,7 +164,6 @@
                 case 1:
                     if((pacmanRow + 1 ) < rows){
                         if(boardArray[pacmanRow+1][pacmanCol] != 1){
-                            System.out.println("updateGame Down");
                             move_packman(1);
                         }
                     }
@@ -174,7 +171,6 @@
                 case 2:
                     if(pacmanCol + 1 < cols) {
                         if(boardArray[pacmanRow][pacmanCol+1] != 1){
-                            System.out.println("updateGame Right");
                             move_packman(2);
                         }
                     }
@@ -182,7 +178,6 @@
                 case 3:
                     if(pacmanCol - 1 > 0){
                         if(boardArray[pacmanRow][pacmanCol-1] != 1){
-                            System.out.println("updateGame Left");
                             move_packman(3);
                         }
                     }

@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -14,6 +15,7 @@ import javafx.animation.AnimationTimer;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class PongController {
@@ -25,14 +27,24 @@ public class PongController {
     @FXML public Rectangle clanker;
     @FXML public Rectangle ball;
 
-    public boolean hasStarted = false;
+    @FXML public Label pScore;
+    @FXML public Label cScore;
+
+    @FXML public CheckBox BotL;
+    @FXML public CheckBox BotR;
+    @FXML public Button Start;
+    @FXML public GridPane StartMenu;
+
+
+    private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     public boolean gameOver = false;
     public int[] direction = new  int[] {0, 0};
-    public float velocity = 0;
-    public int score = 0;
+    public int pScoreI = 0;
+    public int cScoreI = 0;
+    public boolean turn = false;
     long referenceTime = System.currentTimeMillis();
 
-    public void initialize(){
+    public void initialize() {
         backToMain.setOnAction(event -> {
             try {
                 Views.getMainView(rootPane);
@@ -44,65 +56,83 @@ public class PongController {
         Platform.runLater(() -> {
             HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
             HelloApplication.primaryStage.getScene().getRoot().requestFocus();
-            HelloApplication.primaryStage.getScene().setOnKeyPressed(event -> keyPressed(event));
+
+            for (KeyCode code : KeyCode.values()) {
+                keys.put(code, false);
+            }
+            HelloApplication.primaryStage.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+                keys.put(event.getCode(), true);
+            });
+            HelloApplication.primaryStage.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, event -> {
+                keys.put(event.getCode(), false);
+            });
+            //HelloApplication.primaryStage.getScene().setOnKeyPressed(event -> keyPressed(event));
         });
 
+        BotL.setOnAction(event -> {
+            HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
+            HelloApplication.primaryStage.getScene().getRoot().requestFocus();
+        });
+        BotR.setOnAction(event -> {
+            HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
+            HelloApplication.primaryStage.getScene().getRoot().requestFocus();
+        });
+        Start.setOnAction(event -> {
+            initializeGame();
+            pScoreI = 0;
+            cScoreI = 0;
+            if (Start.getText().equals("Start Game")) {
+                gameLoop.start();
+            } else {
+                gameOver = false;
+            }
+            StartMenu.setVisible(false);
+            StartMenu.setManaged(false);
+            HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
+            HelloApplication.primaryStage.getScene().getRoot().requestFocus();
+        });
+
+    }
+
+    AnimationTimer gameLoop = new AnimationTimer() {
+
+        @Override
+        public void handle(long now) {
+            if(!gameOver){
+                if(System.currentTimeMillis() - referenceTime >= 10) {
+                    updateGame();
+                    referenceTime = System.currentTimeMillis();
+                }
+            }else{
+                stopGame();
+            }
+        }
+    };
+
+    public void initializeGame(){
+        Random rand = new Random(System.currentTimeMillis() % 4 +1);
         ball.setY((int)HelloApplication.primaryStage.getScene().getHeight()/2);
         ball.setX((int)HelloApplication.primaryStage.getScene().getWidth()/2);
-
         player.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
         clanker.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
 
-        AnimationTimer gameLoop = new AnimationTimer() {
-
-            @Override
-            public void handle(long now) {
-                if(!hasStarted){
-                    initializeGame();
-                    hasStarted = true;
-                }
-                if(!gameOver){
-                    if(System.currentTimeMillis() - referenceTime >= 10) {
-                        updateGame();
-                        referenceTime = System.currentTimeMillis();
-                    }
-                }else{
-                    stopGame();
-                    hasStarted = false;
-                }
-            }
-        };
-        gameLoop.start();
-    }
-
-    public void initializeGame(){
-        Random rand = new Random(4);
         direction[0] = rand.nextInt(10) +1;
         direction[1] = rand.nextInt(10) +1;
-
-        velocity = (float)Math.sqrt((direction[0] * direction[0] +  direction[1] * direction[1]));
     }
+
     public void updateGame(){
-        //System.out.println(ball.getX());
 
-        ball.setY(ball.getY() + (direction[1]));
-        ball.setX(ball.getX() + (direction[0]));
+        ball.setY(ball.getY() + ( direction[1]));
+        ball.setX(ball.getX() + ( direction[0]));
+        System.out.println(direction[0] + " " + direction[1]);
 
-        if(ball.getY() < 0) {
+        if(ball.getY() < 0 || ball.getY() > HelloApplication.primaryStage.getHeight()-40){
             direction[1] = -direction[1];
         }
-        if(ball.getX() < 0) {
+        if(ball.getX() < 0 || ball.getX() > HelloApplication.primaryStage.getWidth()-10) {
             direction[0] = -direction[0];
             stopGame();
         }
-        if(ball.getY() > HelloApplication.primaryStage.getHeight()-40) {
-            direction[1] = -direction[1];
-        }
-        if(ball.getX() > HelloApplication.primaryStage.getWidth()-10) {
-            direction[0] = -direction[0];
-            stopGame();
-        }
-
         if(ball.getBoundsInParent().intersects(player.getBoundsInParent())){
             Bounds ballBounds = ball.getBoundsInParent();
             Bounds playerBounds = player.getBoundsInParent();
@@ -114,7 +144,6 @@ public class PongController {
                     ballBounds.getMinY() < playerBounds.getMinY();
             boolean hitBottom = ballBounds.getMinY() <= playerBounds.getMaxY() &&
                     ballBounds.getMaxY() > playerBounds.getMaxY();
-            System.out.println(hitTop +" "+ hitRight +" "+ hitBottom +" "+ hitLeft);
 
             if(hitBottom || hitTop) {
                 direction[1] = -direction[1];
@@ -123,10 +152,9 @@ public class PongController {
                 direction[0] = -direction[0];
             }
             if(hitLeft){
-                incrementScore();
+                incrementPScore();
             }
         }
-
         if(ball.getBoundsInParent().intersects(clanker.getBoundsInParent())){
             Bounds ballBounds = ball.getBoundsInParent();
             Bounds clankerBounds = clanker.getBoundsInParent();
@@ -147,19 +175,78 @@ public class PongController {
                 direction[0] = -direction[0];
             }
             if(hitRight){
-                incrementScore();
+                incrementBScore();
+            }
+        }
+        System.out.println();
+        float[] ballVector = {(float)-direction[1], (float)direction[0], (float)( -direction[1] * ball.getX()+5 + direction[0] * ball.getY()+5 )};
+        float[] xLowVector = {1f, 0f, 30f};
+        float[] xHighVector = {1f, 0f, (float)HelloApplication.primaryStage.getWidth()-30f};
+        float[] yLowVector = {0f, 1f, 0f};
+        float[] yHighVector = {0f, 1f, (float)HelloApplication.primaryStage.getHeight()-30};
+
+        if(direction[0] > 0){
+            if(BotR.isSelected()){
+                float[] coordinates1 = systemSolve(ballVector[0], ballVector[1], ballVector[2],
+                        xHighVector[0], xHighVector[1], xHighVector[2]);
+                //System.out.println(coordinates1[0] + " " + coordinates1[1] + " " + HelloApplication.primaryStage.getHeight());
+                if (Math.abs(coordinates1[1]) < HelloApplication.primaryStage.getHeight() - 30 && Math.abs(coordinates1[1]) > 0) {
+                    player.setY(coordinates1[1] - 50);
+                }
+            }
+        }else{
+            if(BotL.isSelected()){
+                float[] coordinates1 = systemSolve(ballVector[0], ballVector[1], ballVector[2],
+                        xLowVector[0], xLowVector[1], xLowVector[2]);
+                //System.out.println(coordinates1[0] + " " + coordinates1[1] + " " + HelloApplication.primaryStage.getHeight());
+                if (Math.abs(coordinates1[1]) < HelloApplication.primaryStage.getHeight() - 30 && Math.abs(coordinates1[1]) > 0) {
+                    clanker.setY(coordinates1[1] - 50);
+                }
+            }
+        }
+        if (isPressed(KeyCode.UP)) {
+            if ((player.getY() - 15) > (-20)){
+                player.setY(player.getY() -15);
+            }
+        } else if (isPressed(KeyCode.DOWN)) {
+            if ((player.getY() + 15) < ((int)HelloApplication.primaryStage.getScene().getHeight() -80)){
+                player.setY(player.getY() + 15);
+            }
+        } else if (isPressed(KeyCode.W)) {
+            if ((clanker.getY() - 15) > (-20)){
+                clanker.setY(clanker.getY() -15);
+            }
+        } else if (isPressed(KeyCode.S)) {
+            if ((clanker.getY() + 15) < ((int)HelloApplication.primaryStage.getScene().getHeight() -80)){
+                clanker.setY(clanker.getY() + 15);
             }
         }
     }
+    public void incrementPScore(){
+        pScoreI++;
+        turn = true;
+        pScore.setText("Score: "+ pScoreI);
+    }
+    public void incrementBScore(){
+        cScoreI++;
+        turn = false;
+        cScore.setText("Score: "+ cScoreI);
+    }
+    public static float[] systemSolve(float a1, float b1, float c1, float a2, float b2, float c2){
+        float[] temp = {0, 0};
+        float d = a1*b2 - a2*b1;
+        temp[0] = (c1*b2 - c2*b1)/d;
+        temp[1] = (c2*a1 - c1*a2)/d;
+        System.out.println(temp[0] + " " + temp[1]);
+        return temp;
+    }
+
     public void stopGame(){
         gameOver = true;
+        StartMenu.setManaged(true);
+        StartMenu.setVisible(true);
+        Start.setText("Play Again");
     }
-    public void incrementScore(){
-        score++;
-        ((Label)(rootPane.lookup("GridPane")).lookup("Label")).setText("Score: "+ score);
-    }
-
-
 
     public void keyPressed(javafx.scene.input.KeyEvent event) {
         System.out.println("Pong "+ event.getCode());
@@ -169,20 +256,21 @@ public class PongController {
             }
         } else if (event.getCode() == KeyCode.DOWN) {
             if ((player.getY() + 20) < ((int)HelloApplication.primaryStage.getScene().getHeight() -80)){
-                System.out.println(""+ (int)HelloApplication.primaryStage.getScene().getHeight()+ " "+ player.getY());
                 player.setY(player.getY() + 20);
             }
-        } else if (event.getCode() == KeyCode.W) {
+        }
+        if (event.getCode() == KeyCode.W) {
             if ((clanker.getY() - 20) > (-20)){
                 clanker.setY(clanker.getY() -20);
             }
         } else if (event.getCode() == KeyCode.S) {
             if ((clanker.getY() + 20) < ((int)HelloApplication.primaryStage.getScene().getHeight() -80)){
-                System.out.println(""+ (int)HelloApplication.primaryStage.getScene().getHeight()+ " "+ clanker.getY());
                 clanker.setY(clanker.getY() + 20);
             }
         }
     }
 
-    // Start the loop
+    public boolean isPressed(KeyCode key) {
+        return keys.getOrDefault(key, false);
+    }
 }
