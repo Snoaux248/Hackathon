@@ -12,6 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -160,9 +161,10 @@ public class TetrisController {
         draw();
 
         DropShadow outline = new DropShadow();
+        outline.setBlurType(BlurType.GAUSSIAN);
         outline.setColor(Color.BLACK); // outline color switched to black
-        outline.setRadius(3);
-        outline.setSpread(1.0);
+        outline.setRadius(15);
+        outline.setSpread(.18);
         outline.setOffsetX(0);
         outline.setOffsetY(0);
 

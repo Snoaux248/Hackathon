@@ -4,12 +4,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -39,6 +42,16 @@ public class HelloController {
 
     @FXML
     public void initialize() {
+
+        DropShadow outline = new DropShadow();
+        outline.setBlurType(BlurType.GAUSSIAN);
+        outline.setColor(Color.WHITE);
+        outline.setRadius(8);
+        outline.setSpread(.18);
+        outline.setOffsetX(0);
+        outline.setOffsetY(0);
+
+        welcomeText.setEffect(outline);
 
         String bgUrl = Objects.requireNonNull(
                 getClass().getResource("/images/gridstillbackground.png"),
