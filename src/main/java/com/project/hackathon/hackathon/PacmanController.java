@@ -271,7 +271,9 @@ public class PacmanController {
                 pelletCount += 1;
             }
         }
-        System.out.println("Pellet count: " + pelletCount);
+        if(pelletCount == 300){
+            gameOver = true;
+        }
     }
     public void buildDots(){
         for(int i = 0; i < rows-1; i++){

@@ -79,13 +79,16 @@ public class PongController {
             HelloApplication.primaryStage.getScene().getRoot().requestFocus();
         });
         Start.setOnAction(event -> {
+            cScoreI = 0;
+            pScoreI = 0;
+            Score.setText(cScoreI+" : "+pScoreI);
             initializeGame();
         });
         ball.setY((int)HelloApplication.primaryStage.getScene().getHeight()/2);
         ball.setX((int)HelloApplication.primaryStage.getScene().getWidth()/2);
         player.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
         clanker.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
-
+        Score.setText("0 : 0");
     }
 
     AnimationTimer gameLoop = new AnimationTimer() {
@@ -97,8 +100,16 @@ public class PongController {
                     updateGame();
                     referenceTime = System.currentTimeMillis();
                 }
-            }else{
-                stopGame();
+            }else {
+                if (cScoreI < 5 && pScoreI < 5){
+                    initializeGame();
+                }else{
+                    StartMenu.setManaged(true);
+                    StartMenu.setVisible(true);
+                    gameOverText.setManaged(true);
+                    gameOverText.setVisible(true);
+                    Start.setText("Play Again");
+                }
             }
         }
     };
@@ -110,22 +121,19 @@ public class PongController {
         player.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
         clanker.setY((int)(HelloApplication.primaryStage.getScene().getHeight()-100)/2);
 
-        direction[0] = rand.nextInt(10) +1;
-        direction[1] = rand.nextInt(10) +1;
-
-        pScoreI = 0;
-        cScoreI = 0;
+        direction[0] = rand.nextInt(20) -10;
+        direction[1] = rand.nextInt(20) -10;
 
         if (Start.getText().equals("Start Game")) {
             gameLoop.start();
         }
-        Score.setText("0 : 0");
         gameOver = false;
         StartMenu.setVisible(false);
         StartMenu.setManaged(false);
         HelloApplication.primaryStage.getScene().getRoot().setFocusTraversable(true);
         HelloApplication.primaryStage.getScene().getRoot().requestFocus();
     }
+
     public void updateGame(){
 
         ball.setY(ball.getY() + ( direction[1]));
@@ -138,6 +146,12 @@ public class PongController {
         if(ball.getX() < 0 || ball.getX() > HelloApplication.primaryStage.getWidth()-10) {
             direction[0] = -direction[0];
             stopGame();
+            if(direction[0] < 0){
+                incrementBScore();
+            }else{
+                incrementPScore();
+            }
+
         }
         if(ball.getBoundsInParent().intersects(player.getBoundsInParent())){
             Bounds ballBounds = ball.getBoundsInParent();
@@ -156,9 +170,6 @@ public class PongController {
             }
             if(hitLeft || hitRight){
                 direction[0] = -direction[0];
-            }
-            if(hitLeft){
-                incrementPScore();
             }
         }
         if(ball.getBoundsInParent().intersects(clanker.getBoundsInParent())){
@@ -180,9 +191,6 @@ public class PongController {
             if(hitLeft || hitRight){
                 direction[0] = -direction[0];
             }
-            if(hitRight){
-                incrementBScore();
-            }
         }
         System.out.println();
         float[] ballVector = {(float)-direction[1], (float)direction[0], (float)( -direction[1] * ball.getX()+5 + direction[0] * ball.getY()+5 )};
@@ -196,7 +204,7 @@ public class PongController {
                 float[] coordinates1 = systemSolve(ballVector[0], ballVector[1], ballVector[2],
                         xHighVector[0], xHighVector[1], xHighVector[2]);
                 //System.out.println(coordinates1[0] + " " + coordinates1[1] + " " + HelloApplication.primaryStage.getHeight());
-                if (Math.abs(coordinates1[1]) < HelloApplication.primaryStage.getHeight() - 30 && Math.abs(coordinates1[1]) > 0) {
+                if (Math.abs(coordinates1[1]) <= (int)HelloApplication.primaryStage.getHeight() - 30 && (int)Math.abs(coordinates1[1]) >= 0) {
                     player.setY(coordinates1[1] - 50);
                 }
             }
@@ -205,7 +213,7 @@ public class PongController {
                 float[] coordinates1 = systemSolve(ballVector[0], ballVector[1], ballVector[2],
                         xLowVector[0], xLowVector[1], xLowVector[2]);
                 //System.out.println(coordinates1[0] + " " + coordinates1[1] + " " + HelloApplication.primaryStage.getHeight());
-                if (Math.abs(coordinates1[1]) < HelloApplication.primaryStage.getHeight() - 30 && Math.abs(coordinates1[1]) > 0) {
+                if (Math.abs(coordinates1[1]) <= (int)HelloApplication.primaryStage.getHeight() - 30 && (int)Math.abs(coordinates1[1]) >= 0) {
                     clanker.setY(coordinates1[1] - 50);
                 }
             }
@@ -250,19 +258,17 @@ public class PongController {
         return temp;
     }
 
-    public void stopGame(){
+    public void stopGame() {
         gameOver = true;
-        StartMenu.setManaged(true);
-        StartMenu.setVisible(true);
-        gameOverText.setManaged(true);
-        gameOverText.setVisible(true);
-        Start.setText("Play Again");
     }
 
     public void keyPressed(javafx.scene.input.KeyEvent event) {
         System.out.println("Pong "+ event.getCode());
         if(event.getCode() == KeyCode.SPACE){
             if(gameOver == true){
+                cScoreI = 0;
+                pScoreI = 0;
+                Score.setText(cScoreI+" : "+pScoreI);
                 initializeGame();
             }
         }

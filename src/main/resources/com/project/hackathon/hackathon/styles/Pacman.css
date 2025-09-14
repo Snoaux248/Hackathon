@@ -4,3 +4,12 @@
 .pellet{
     -fx-fill:white;
 }
+#backToMain{
+    -fx-background-color:black;
+    -fx-text-fill: #555;
+    -fx-pref-width: 80px;
+    -fx-pref-height: 20px;
+    -fx-font-weight:bold;
+    -fx-font-size: 20px;
+    -fx-background-radius: 10px 10px 10px 10px;
+}
