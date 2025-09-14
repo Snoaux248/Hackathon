@@ -152,7 +152,6 @@ public class TetrisController {
         textBox.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> e.consume());
     }
 
-    // ---- Game control ----
     private void resetGame() {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) board[r][c] = 0;

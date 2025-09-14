@@ -33,7 +33,6 @@
               AnchorPane.bottomAnchor="0.0">
 
         <columnConstraints>
-            <!-- Left column centered header (score), right column normal -->
             <ColumnConstraints percentWidth="60"/>
             <ColumnConstraints percentWidth="30"/>
         </columnConstraints>
