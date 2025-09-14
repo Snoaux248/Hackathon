@@ -7,14 +7,32 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.effect.DropShadow?>
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.PongController">
 
     <GridPane AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0">
-            <Label> Score: 0 </Label>
+        <HBox spacing="50">
+            <Label fx:id="Score"> 0 : 0 </Label>
+        </HBox>
     </GridPane>
-    <Button fx:id="backToMain" >back</Button>
+    <GridPane fx:id="StartMenu" alignment="center" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <VBox>
+            <CheckBox fx:id="BotL">Enable Bot for left</CheckBox>
+            <CheckBox fx:id="BotR">Enable Bot for right</CheckBox>
+            <Text fx:id="gameOverText" text="GAME OVER"
+                  style="-fx-font-size:36px; -fx-font-weight:bold; -fx-fill:#ff073a;"
+                  visible="false">
+                <effect>
+                    <DropShadow radius="6" color="#ff073a"/>
+                </effect>
+            </Text>
+            <Button fx:id="Start"> Start Game</Button>
+        </VBox>
+    </GridPane>
+    <Button fx:id="backToMain" AnchorPane.leftAnchor="10"  AnchorPane.TopAnchor="10">BACK</Button>
 
     <Rectangle fx:id="player" AnchorPane.rightAnchor="10" width="20" height="100"></Rectangle>
     <Rectangle fx:id="clanker" AnchorPane.leftAnchor="10" width="20" height="100"></Rectangle>
