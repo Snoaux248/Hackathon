@@ -20,13 +20,11 @@
 
         <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="20" vgap="25">
 
-            <!-- Two columns splitting width 50/50 -->
             <columnConstraints>
-                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/> <!-- its weird but i prefer it this way -->
                 <ColumnConstraints percentWidth="25"/>
             </columnConstraints>
 
-            <!-- Two rows splitting height 50/50 -->
             <rowConstraints>
                 <RowConstraints percentHeight="30"/>
                 <RowConstraints percentHeight="35"/>
@@ -43,44 +41,44 @@
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                     <ImageView fx:id="pongImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
                                fitHeight="220"/>
-                    <Button fx:id="Pong" text="Pong"
+                    <Button fx:id="Pong" text="PONG"
                             maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
                             StackPane.alignment="CENTER"
                             style="-fx-background-color: transparent; -fx-border-color: transparent;
-                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                                   -fx-font-size: 20px; -fx-text-fill: white; -fx-font-family: 'Lucida Console'"/>
                 </StackPane>
 
                 <StackPane GridPane.rowIndex="1" GridPane.columnIndex="1"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                     <ImageView fx:id="tetrisImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
                                fitHeight="220"/>
-                    <Button fx:id="Tetris" text="Tetris"
+                    <Button fx:id="Tetris" text="TETRIS"
                             maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
                             StackPane.alignment="CENTER"
                             style="-fx-background-color: transparent; -fx-border-color: transparent;
-                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                                   -fx-font-size: 20px; -fx-text-fill: white; -fx-font-family: 'Lucida Console'"/>
                 </StackPane>
 
                 <StackPane GridPane.rowIndex="2" GridPane.columnIndex="0"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                     <ImageView fx:id="pacmanImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
                                fitHeight="220"/>
-                    <Button fx:id="Pacman" text="Pacman"
+                    <Button fx:id="Pacman" text="PACMAN"
                             maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
                             StackPane.alignment="CENTER"
                             style="-fx-background-color: transparent; -fx-border-color: transparent;
-                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                                   -fx-font-size: 20px; -fx-text-fill: white; -fx-font-family: 'Lucida Console'"/>
                 </StackPane>
 
                 <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1"
                            GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                     <ImageView fx:id="dinoImage" preserveRatio="true" mouseTransparent="true" fitWidth="400"
                                fitHeight="220"/>
-                    <Button fx:id="Dino" text="Dino"
+                    <Button fx:id="Dino" text="DINO"
                             maxWidth="Infinity" maxHeight="Infinity" wrapText="true" textAlignment="CENTER"
                             StackPane.alignment="CENTER"
                             style="-fx-background-color: transparent; -fx-border-color: transparent;
-                                   -fx-font-size: 20px; -fx-text-fill: white;"/>
+                                   -fx-font-size: 20px; -fx-text-fill: white; -fx-font-family: 'Lucida Console'"/>
                 </StackPane>
             </children>
         </GridPane>
