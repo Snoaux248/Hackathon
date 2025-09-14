@@ -170,7 +170,7 @@ public class DinoController {
             cactus.setX(rootPane.getWidth());
         }
     }
-
+//yo
     private double getMaxHeight(HBox box) {
         double max = 0;
         for (var node : box.getChildren()) {
