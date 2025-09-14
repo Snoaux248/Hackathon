@@ -26,8 +26,8 @@ public class PacmanController {
 
     private final int rows = 32;
     private final int cols = 29;
-    private int pacmanRow = 1;
-    private int pacmanCol = 1;
+    private int pacmanRow = 2;
+    private int pacmanCol = 2;
     private int direction = 0;
 
     private double pacmanOffsetY = -6; // shift Pacman slightly up
@@ -141,56 +141,24 @@ public class PacmanController {
         AnchorPane.setTopAnchor(pacmanImage, boardOffsets[1]);
 
         double radius = scale / 2.2;
-        Pacman.setRadius(radius);
+        Pacman.setRadius(radius*2);
         AnchorPane.setLeftAnchor(Pacman, boardOffsets[0] + pacmanCol*scale + scale/2 - radius + pacmanOffsetX);
         AnchorPane.setTopAnchor(Pacman, boardOffsets[1] + pacmanRow*scale + scale/2 - radius + pacmanOffsetY);
 
         rootPane.getChildren().removeIf(node -> node instanceof Circle && node != Pacman);
-        spawnPellets(scale);
+        //spawnPellets(scale);
+        buildDots();
     }
 
-    private void spawnPellets(double scale) {
-        boolean[][] reachable = new boolean[rows][cols];
-        floodFill(pacmanRow, pacmanCol, reachable);
-        double pelletRadius = scale / 6;
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (boardArray[i][j] == 0 && reachable[i][j]) {
-                    double x = boardOffsets[0] + j * scale * 0.98 - 1;
-                    double y = boardOffsets[1] + i * scale * 0.96 - 1;
-
-                    boolean wallAbove = i > 0 && boardArray[i-1][j] == 1;
-                    boolean wallBelow = i < rows-1 && boardArray[i+1][j] == 1;
-                    boolean wallLeft  = j > 0 && boardArray[i][j-1] == 1;
-                    boolean wallRight = j < cols-1 && boardArray[i][j+1] == 1;
-
-                    // Horizontal corridor
-                    if ((wallLeft || wallRight) && !(wallAbove || wallBelow)) {
-                        addPellet(x + scale/2, y + scale*0.23, pelletRadius); // slightly up
-                        addPellet(x + scale/2, y + scale*0.73, pelletRadius);
-                    }
-                    // Vertical corridor
-                    else if ((wallAbove || wallBelow) && !(wallLeft || wallRight)) {
-                        addPellet(x + scale*0.23, y + scale/2, pelletRadius);
-                        addPellet(x + scale*0.73, y + scale/2, pelletRadius);
-                    }
-                    // Corner or open space
-                    else {
-                        addPellet(x + scale/2, y + scale/2, pelletRadius);
-                    }
-                }
-            }
-        }
-    }
 
     private void addPellet(double x, double y, double r) {
-        Circle pellet = new Circle(r);
+        /*Circle pellet = new Circle(r);
         pellet.getStyleClass().add("pellet");
         pellet.setCenterX(x);
         pellet.setCenterY(y);
         pellet.setStyle("-fx-fill:white;");
-        rootPane.getChildren().add(pellet);
+        rootPane.getChildren().add(pellet);*/
     }
 
     private void floodFill(int r, int c, boolean[][] reachable) {
@@ -228,22 +196,48 @@ public class PacmanController {
     private void movePackman(int dir) {
         double scale = Math.min(imageWidth / (double) cols, imageHeight / (double) rows);
         switch(dir){
-            case 0: if (pacmanRow - 1 >= 0 && boardArray[pacmanRow-1][pacmanCol] != 1) pacmanRow--; break;
-            case 1: if (pacmanRow + 1 < rows && boardArray[pacmanRow+1][pacmanCol] != 1) pacmanRow++; break;
-            case 2: if (pacmanCol + 1 < cols && boardArray[pacmanRow][pacmanCol+1] != 1) {
-                pacmanCol++;
-            } else if (pacmanCol + 1 >= cols) {
-                pacmanCol = 0; // wrap to left
-            } pacmanCol++; break;
-            case 3: if (pacmanCol - 1 >= 0 && boardArray[pacmanRow][pacmanCol-1] != 1) {
-                pacmanCol--;
-            } else if (pacmanCol - 1 < 0) {
-                pacmanCol = cols - 1; // wrap to right
-            }
-                pacmanCol--; break;
+            case 0:
+                //up -2r
+                if (pacmanRow - 2 >= 0 && boardArray[pacmanRow-2][pacmanCol] != 1 && boardArray[pacmanRow-2][pacmanCol-1] != 1){
+                    pacmanRow--;
+                }
+            break;
+            case 1:
+                //down +1r
+                if (pacmanRow + 1 <= rows && boardArray[pacmanRow+1][pacmanCol] != 1 && boardArray[pacmanRow+1][pacmanCol-1] != 1){
+                    pacmanRow++;
+                }
+            break;
+            case 2:
+                //right +1c
+                if(pacmanCol + 1 <= cols && boardArray[pacmanRow][pacmanCol+1] != 1 && boardArray[pacmanRow-1][pacmanCol+1] != 1){
+                    pacmanCol++;
+                }
+            break;
+            case 3:
+                //left -2c
+                if(pacmanCol - 2 > 0 && boardArray[pacmanRow][pacmanCol-2] != 1 && boardArray[pacmanRow-1][pacmanCol-2] != 1){
+                    pacmanCol--;
+                }
+            break;
         }
         double radius = Pacman.getRadius();
-        AnchorPane.setLeftAnchor(Pacman, boardOffsets[0] + pacmanCol*scale + scale/2 - radius + pacmanOffsetX);
-        AnchorPane.setTopAnchor(Pacman, boardOffsets[1] + pacmanRow*scale + scale/2 - radius + pacmanOffsetY - 5);
+        AnchorPane.setLeftAnchor(Pacman, (double)(pacmanCol * (imageWidth/cols)*.99) + boardOffsets[0] -14);
+        AnchorPane.setTopAnchor(Pacman,  (double)(pacmanRow * (imageHeight/rows)*.99) + boardOffsets[1] - 25);
+    }
+    public void buildDots(){
+        for(int i = 0; i < rows-1; i++){
+            for(int j = 0; j < cols-1; j++){
+                if(boardArray[i][j] == 0 && boardArray[i+1][j] == 0 && boardArray[i][j+1] == 0 && boardArray[i+1][j+1] == 0){
+                    Circle newPellet = new Circle();
+                    newPellet.setRadius(2.5);
+                    newPellet.getStyleClass().add("pellet");
+                    System.out.println(newPellet);
+                    AnchorPane.setLeftAnchor(newPellet, ((double)(j+1) * (imageWidth/cols)*.99) + boardOffsets[0] +2);
+                    AnchorPane.setTopAnchor(newPellet, ((double)(i) * (imageHeight/rows)*.99) + boardOffsets[1]+10);
+                    rootPane.getChildren().add(newPellet);
+                }
+            }
+        }
     }
 }
