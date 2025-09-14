@@ -224,7 +224,7 @@ public class PacmanController {
             break;
             case 3:
                 //left -2c
-                if(pacmanCol - 2 > 0 && boardArray[pacmanRow][pacmanCol-2] != 1 && boardArray[pacmanRow-1][pacmanCol-2] != 1){
+                if(pacmanCol - 2 >= 0 && boardArray[pacmanRow][pacmanCol-2] != 1 && boardArray[pacmanRow-1][pacmanCol-2] != 1){
                     pacmanCol--;
                 }
             break;
@@ -267,9 +267,22 @@ public class PacmanController {
     public void buildDots(){
         for(int i = 0; i < rows-1; i++){
             for(int j = 0; j < cols-1; j++){
+                if(i == 11 || i == 17){
+                    if(j >= 0 && j < 4 || j >= 24 && j < cols) {
+                        continue;
+                    }
+                }
+                if(i == 14){
+                    if(j >= 12 && j < 16) {
+                        continue;
+                    }
+                }
                 if(boardArray[i][j] == 0 && boardArray[i+1][j] == 0 && boardArray[i][j+1] == 0 && boardArray[i+1][j+1] == 0){
                     Circle newPellet = new Circle();
                     newPellet.setRadius(2.5);
+                    if((i == 3 || i == 22) && (j == 1 || j == 26)){
+                        newPellet.setRadius((double)7);
+                    }
                     newPellet.getStyleClass().add("pellet");
                     newPellet.setCenterX(((double)(j+1) * (imageWidth/cols)*.99) + boardOffsets[0] +4);
                     newPellet.setCenterY(((double)(i) * (imageHeight/rows)*.99) + boardOffsets[1] +10);
