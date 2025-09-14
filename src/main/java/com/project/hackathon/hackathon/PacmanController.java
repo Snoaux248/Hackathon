@@ -220,21 +220,26 @@ public class PacmanController {
                 //right +1c
                 if(pacmanCol + 1 <= cols && boardArray[pacmanRow][pacmanCol+1] != 1 && boardArray[pacmanRow-1][pacmanCol+1] != 1){
                     pacmanCol++;
+                    if(pacmanCol == 27 && pacmanRow == 15){
+                        pacmanCol = 1;
+                    }
                 }
             break;
             case 3:
                 //left -2c
                 if(pacmanCol - 2 >= 0 && boardArray[pacmanRow][pacmanCol-2] != 1 && boardArray[pacmanRow-1][pacmanCol-2] != 1){
                     pacmanCol--;
+                    if(pacmanCol == 1 && pacmanRow == 15){
+                        pacmanCol = 28;
+                    }
                 }
             break;
 
         }
-        checkCollision();
         // Move hidden circle for collisions
         Pacman.setCenterX((double)(pacmanCol * (imageWidth/cols)*.99) + boardOffsets[0] + 5);
         Pacman.setCenterY((double)(pacmanRow * (imageHeight/rows)*.99) + boardOffsets[1] - 10);
-
+        checkCollision();
         // Move PNG sprite for visuals
         double x = (double)(pacmanCol * (imageWidth/cols)*.99) + boardOffsets[0] - 14;
         double y = (double)(pacmanRow * (imageHeight/rows)*.99) + boardOffsets[1] - 25;
