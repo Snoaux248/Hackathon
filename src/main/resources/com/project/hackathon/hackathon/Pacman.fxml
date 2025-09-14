@@ -4,18 +4,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.shape.Circle?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.PacmanController"
             prefHeight="800.0" prefWidth="600.0">
-
+    <Circle fx:id="Pacman" radius="10" fill="YELLOW"/>
     <GridPane fx:id="board" alignment="center"
               AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
-              AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0"
-              gridLinesVisible="true">
-        <!-- Pac-Man starts as a Circle, will be wrapped in StackPane in controller -->
-        <Circle fx:id="Pacman" radius="10" fill="YELLOW"/>
+              AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0">
     </GridPane>
-    <!-- -->
+    <GridPane fx:id="boardImage" alignment="center" AnchorPane.leftAnchor="0"
+              AnchorPane.topAnchor="35" AnchorPane.rightAnchor="0">
+        <ImageView fx:id="pacmanImage" fitWidth="100" fitHeight="100" preserveRatio="true">
+
+        </ImageView>
+    </GridPane>
+
     <Button fx:id="backToMain" layoutX="10" layoutY="10" text="Back"/>
 </AnchorPane>
