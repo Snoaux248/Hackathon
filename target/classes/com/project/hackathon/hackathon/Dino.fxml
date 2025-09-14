@@ -6,10 +6,11 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.effect.*?>
 
+<?import javafx.scene.Group?>
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.project.hackathon.hackathon.DinoController">
-
+<Group layoutY="200">
     <!-- Ground -->
     <Line fx:id="ground" startY="180" endX="600" endY="180">
         <effect>
@@ -52,13 +53,13 @@
 
     <!-- Score Text -->
     <Text fx:id="scoreText" text="Score: 0"
-          layoutX="590" layoutY="200"
+          layoutX="570" layoutY="200"
           textAlignment="CENTER">
         <effect>
             <DropShadow radius="4" color="#00fff7"/>
         </effect>
     </Text>
-
+</Group>
     <!-- Game Over Text and Restart Button -->
     <GridPane alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0"
               AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">

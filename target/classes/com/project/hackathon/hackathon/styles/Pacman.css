@@ -1,3 +1,6 @@
 #rootPane{
     -fx-background-color:#333;
 }
+.pellet{
+    -fx-fill:white;
+}
