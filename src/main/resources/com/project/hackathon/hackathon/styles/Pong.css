@@ -1,23 +1,52 @@
 AnchorPane{
     -fx-alignment:center;
-    -fx-background: #333333;
+    -fx-background-color: linear-gradient(from 0% 0% to 45% 80%, #0f0c29 0%, #302b63 50%, #24243e 100%)
 }
 GridPane{
     -fx-pref-width: 100px;
     -fx-pref-height: 100px;
-    -fx-max-width: Infinite;
-    -fx-max-height: 100px;
-    -fx-min-width: Infinite;
-    -fx-min-height: 100px;
     -fx-alignment: center;
 }
 Label{
+    -fx-text-fill: #888;
     -fx-alignment: center;
     -fx-font-size: 60px;
 }
+#ball{
+    -fx-fill: #fff;
+    -fx-arc-height: 10px;
+    -fx-arc-width: 10px;
+}
 #player, #clanker{
-    -fx-fill: #caf4f4;
+    -fx-fill: #00fff7;
     -fx-arc-height: 10px;
     -fx-arc-width: 10px;
     -fx-effect: dropshadow(gaussian, deepskyblue, 10, 0.3, 0, 0);
+}
+
+#StartMenu VBox{
+    -fx-padding: 40px;
+    -fx-spacing: 30px;
+    -fx-alignment: center;
+}
+#StartMenu VBox CheckBox {
+    -fx-font-size: 20px;
+    -fx-text-fill: #888;
+}
+#Start{
+    -fx-background-color:black;
+    -fx-text-fill:#ff073a;
+    -fx-font-weight:bold;
+}
+#Score{
+    -fx-text-fill: #fff;
+}
+#backToMain{
+    -fx-background-color:black;
+    -fx-text-fill: #555;
+    -fx-pref-width: 80px;
+    -fx-pref-height: 20px;
+    -fx-font-weight:bold;
+    -fx-font-size: 20px;
+    -fx-background-radius: 10px 10px 10px 10px;
 }

@@ -4,43 +4,76 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
 
 <AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.project.hackathon.hackathon.DinoController"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="com.project.hackathon.hackathon.DinoController">
 
     <!-- Ground -->
-    <Line fx:id="ground" startY="180" endX="600" endY="180" stroke="black" strokeWidth="2"/>
+    <Line fx:id="ground" startY="180" endX="600" endY="180">
+        <effect>
+            <Glow level="0.5"/>
+        </effect>
+    </Line>
 
     <!-- Dino -->
-    <Rectangle fx:id="dino" x="50" y="150" width="30" height="30" fill="black"/>
+    <Rectangle fx:id="dino" x="50" y="150" width="30" height="30" fill="#00fff7">
+        <effect>
+            <DropShadow radius="10" color="#00fff7"/>
+        </effect>
+    </Rectangle>
 
     <!-- Cactus -->
-    <Rectangle fx:id="cactus" x="600" y="150" width="20" height="30" fill="green"/>
+    <Rectangle fx:id="cactus" x="600" y="150" width="20" height="30" fill="#39ff14">
+        <effect>
+            <DropShadow radius="10" color="#39ff14"/>
+        </effect>
+    </Rectangle>
 
     <!-- Multi Cactus -->
-    <HBox fx:id="multi" spacing="5" alignment="BOTTOM_CENTER" layoutX="600" layoutY="150">
-        <Rectangle width="20" height="20" fill="green"/>
-        <Rectangle width="20" height="60" fill="green"/>
-        <Rectangle width="20" height="40" fill="green"/>
+    <HBox fx:id="multi" layoutX="600" layoutY="150">
+        <Rectangle width="20" height="20">
+            <effect>
+                <DropShadow radius="10" color="#39ff14"/>
+            </effect>
+        </Rectangle>
+        <Rectangle width="20" height="60">
+            <effect>
+                <DropShadow radius="10" color="#39ff14"/>
+            </effect>
+        </Rectangle>
+        <Rectangle width="20" height="40">
+            <effect>
+                <DropShadow radius="10" color="#39ff14"/>
+            </effect>
+        </Rectangle>
     </HBox>
 
     <!-- Score Text -->
     <Text fx:id="scoreText" text="Score: 0"
           layoutX="590" layoutY="200"
-          style="-fx-font-size: 24px; -fx-fill: black;"
-          textAlignment="CENTER"
-          />
+          textAlignment="CENTER">
+        <effect>
+            <DropShadow radius="4" color="#00fff7"/>
+        </effect>
+    </Text>
 
     <!-- Game Over Text and Restart Button -->
-    <GridPane alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0"
-              AnchorPane.topAnchor="0">
+    <GridPane alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0"
+              AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
         <VBox spacing="10" alignment="CENTER">
-            <Text fx:id="gameOverText" text="GAME OVER" fill="red" style="-fx-font-size:36px;" visible="false"/>
+            <Text fx:id="gameOverText" text="GAME OVER"
+                  visible="false">
+                <effect>
+                    <DropShadow radius="6" color="#ff073a"/>
+                </effect>
+            </Text>
             <Button fx:id="restartButton" text="Restart" visible="false"/>
         </VBox>
     </GridPane>
 
-    <Button fx:id="backToMain">back</Button>
+    <!-- Back Button -->
+    <Button fx:id="backToMain" AnchorPane.leftAnchor="10"  AnchorPane.TopAnchor="10">BACK</Button>
+
 </AnchorPane>

@@ -30,6 +30,9 @@ public class Views {
         AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Views.class.getResource("Dino.fxml")));
         stage.getScene().setRoot(pane);
         stage.setTitle("Dino! ");
+        stage.getScene().getStylesheets().clear();
+        stage.getScene().getStylesheets().add(Objects.requireNonNull(Views.class.getResource("styles/Dino.css")).toExternalForm());
+
         return pane;
     }
     public static AnchorPane getPacmanView(AnchorPane rootPane) throws Exception{
